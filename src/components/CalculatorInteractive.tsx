@@ -3,7 +3,9 @@
 import { useCallback, useMemo, useState, type ComponentType } from "react";
 import Link from "next/link";
 import { formatCurrency, formatNumber } from "@/lib/calculators/format";
+import { AdSlot } from "@/components/Ads";
 import CalculatorCard from "@/components/CalculatorCard";
+import { adSlots } from "@/lib/ads";
 import { calculators } from "@/lib/data/calculators";
 import type { Calculator, Category } from "@/lib/data/calculators";
 import MortgageCalculator from "@/components/calculators/MortgageCalculator";
@@ -32,6 +34,7 @@ import type {
   InsightChart,
   ReferenceTable,
 } from "@/lib/data/calculatorContent";
+import { buildFaqItems } from "@/lib/faq";
 import type { CalculatorInsights } from "@/lib/insights";
 
 type CalculatorInteractiveProps = {
@@ -176,6 +179,11 @@ export default function CalculatorInteractive({
     return [...sameCategory, ...otherCategory].slice(0, 4);
   }, [calculator.category, calculator.slug]);
 
+  const faqItems = useMemo(
+    () => buildFaqItems({ calculator, category, content }),
+    [calculator, category, content]
+  );
+
   return (
     <main>
       <section className="pt-4 pb-3 sm:pt-8 sm:pb-5">
@@ -242,6 +250,12 @@ export default function CalculatorInteractive({
           ) : (
             <CalculatorPlaceholder />
           )}
+        </div>
+      </section>
+
+      <section className="section-pad-compact pt-0 cv-auto">
+        <div className="mx-auto w-full max-w-5xl">
+          <AdSlot slot={adSlots.calculator} minHeight={250} />
         </div>
       </section>
 
@@ -318,6 +332,30 @@ export default function CalculatorInteractive({
           </div>
         </section>
       )}
+
+      <section className="section-pad-compact pt-0 cv-auto">
+        <div className="mx-auto w-full max-w-5xl">
+          <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
+            <p className="text-xs uppercase tracking-[0.4em] text-muted">FAQ</p>
+            <h2 className="mt-2 font-display text-2xl text-ink">
+              Common questions
+            </h2>
+            <div className="mt-4 grid gap-3">
+              {faqItems.map((item) => (
+                <div
+                  key={item.question}
+                  className="rounded-2xl border border-stroke/80 bg-white/70 px-4 py-4"
+                >
+                  <h3 className="text-sm font-semibold text-ink">
+                    {item.question}
+                  </h3>
+                  <p className="mt-2 text-sm text-muted">{item.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {relatedCalculators.length > 0 && (
         <section className="section-pad-compact pt-0 cv-auto">

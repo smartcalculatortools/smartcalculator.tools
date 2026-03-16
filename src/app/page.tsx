@@ -3,9 +3,11 @@ import Link from "next/link";
 import CategoryCard from "@/components/CategoryCard";
 import CalculatorCard from "@/components/CalculatorCard";
 import CalculatorSearch from "@/components/CalculatorSearch";
+import { AdSlot } from "@/components/Ads";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import ScientificCalculator from "@/components/calculators/ScientificCalculator";
+import { adSlots } from "@/lib/ads";
 import { categories, calculators, getCalculatorsByCategory } from "@/lib/data/calculators";
 import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
 
@@ -146,6 +148,12 @@ export default function Home() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="section-pad cv-auto">
+          <div className="mx-auto w-full max-w-6xl">
+            <AdSlot slot={adSlots.home} minHeight={280} />
           </div>
         </section>
 

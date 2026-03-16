@@ -5,6 +5,7 @@ import SiteHeader from "@/components/SiteHeader";
 import CalculatorInteractive from "@/components/CalculatorInteractive";
 import { categoryMap, getCalculator } from "@/lib/data/calculators";
 import { calculatorContent } from "@/lib/data/calculatorContent";
+import { buildFaqItems } from "@/lib/faq";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
 type CalculatorPageProps = {
@@ -61,6 +62,7 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
 
   const category = categoryMap.get(calculator.category);
   const content = calculatorContent[calculator.slug];
+  const faqItems = buildFaqItems({ calculator, category, content });
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -77,6 +79,18 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
       url: siteUrl,
     },
   };
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
 
   return (
     <div className="min-h-screen">
@@ -84,6 +98,10 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <CalculatorInteractive
         calculator={calculator}

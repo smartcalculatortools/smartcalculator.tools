@@ -4,6 +4,7 @@ import { DM_Serif_Display, Space_Grotesk } from "next/font/google";
 import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Analytics from "@/components/Analytics";
+import { AdProvider } from "@/components/Ads";
 import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
 import "./globals.css";
 
@@ -68,6 +69,7 @@ export default function RootLayout({
           <Analytics />
           <VercelAnalytics />
           <SpeedInsights />
+          <AdProvider />
         </Suspense>
       </body>
     </html>
