@@ -1,4 +1,5 @@
-﻿import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import MortgageCalculator from "@/components/calculators/MortgageCalculator";
 import LoanCalculator from "@/components/calculators/LoanCalculator";
 import CompoundInterestCalculator from "@/components/calculators/CompoundInterestCalculator";
@@ -20,6 +21,14 @@ import CryptoFeeImpactCalculator from "@/components/calculators/CryptoFeeImpactC
 import AiTokenCostCalculator from "@/components/calculators/AiTokenCostCalculator";
 import AiModelComparatorCalculator from "@/components/calculators/AiModelComparatorCalculator";
 import { getCalculator } from "@/lib/data/calculators";
+
+export const metadata: Metadata = {
+  title: "Embed",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 type EmbedPageProps = {
   params: Promise<{ slug: string }>;

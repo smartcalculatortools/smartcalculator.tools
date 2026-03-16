@@ -5,13 +5,13 @@ import SiteHeader from "@/components/SiteHeader";
 import CalculatorInteractive from "@/components/CalculatorInteractive";
 import { categoryMap, getCalculator } from "@/lib/data/calculators";
 import { calculatorContent } from "@/lib/data/calculatorContent";
+import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
 type CalculatorPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://smartcalculatortools.com";
+const siteUrl = getSiteUrl();
 
 export async function generateMetadata(
   { params }: CalculatorPageProps
@@ -25,25 +25,28 @@ export async function generateMetadata(
   }
 
   const content = calculatorContent[calculator.slug];
-  const title = `${calculator.name} | Smart Calculator Tools`;
+  const pageTitle = calculator.name;
+  const fullTitle = `${pageTitle} | ${siteName}`;
   const description = content?.summary ?? calculator.blurb;
   const url = `${siteUrl}/calc/${calculator.slug}`;
 
   return {
-    title,
+    title: pageTitle,
     description,
     alternates: {
       canonical: url,
     },
     openGraph: {
-      title,
+      title: fullTitle,
       description,
       url,
+      siteName,
+      locale: siteLocale,
       type: "website",
     },
     twitter: {
-      card: "summary",
-      title,
+      card: "summary_large_image",
+      title: fullTitle,
       description,
     },
   };

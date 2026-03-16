@@ -1,7 +1,15 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { calculators } from "@/lib/data/calculators";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Embed Widgets",
+  description:
+    "Embed Smart Calculator Tools on your site with ready-to-use iframe snippets.",
+  path: "/widgets",
+});
 
 const embedList = [
   { slug: "mortgage", height: 720 },

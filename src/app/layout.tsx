@@ -1,8 +1,11 @@
-﻿import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
-import { Space_Grotesk, DM_Serif_Display } from "next/font/google";
-import "./globals.css";
+import { DM_Serif_Display, Space_Grotesk } from "next/font/google";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Analytics from "@/components/Analytics";
+import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
+import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-sans",
@@ -17,10 +20,37 @@ const dmSerif = DM_Serif_Display({
   display: "swap",
 });
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
-  title: "Smart Calculator Tools",
-  description:
-    "Fast, clear, and modern calculators with fresh UX for finance, health, math, crypto, and AI.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteName,
+    template: `%s | ${siteName}`,
+  },
+  description: siteDescription,
+  applicationName: siteName,
+  openGraph: {
+    type: "website",
+    siteName,
+    title: siteName,
+    description: siteDescription,
+    locale: siteLocale,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteName,
+    description: siteDescription,
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#f4efe6",
 };
 
 export default function RootLayout({
@@ -36,6 +66,8 @@ export default function RootLayout({
         {children}
         <Suspense fallback={null}>
           <Analytics />
+          <VercelAnalytics />
+          <SpeedInsights />
         </Suspense>
       </body>
     </html>

@@ -1,5 +1,13 @@
-﻿import SiteFooter from "@/components/SiteFooter";
+import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Privacy Policy",
+  description:
+    "We keep data collection minimal and do not store calculator inputs on our servers.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

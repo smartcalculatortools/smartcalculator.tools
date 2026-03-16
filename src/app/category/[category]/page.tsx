@@ -4,13 +4,13 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import CalculatorCard from "@/components/CalculatorCard";
 import { categories, getCalculatorsByCategory } from "@/lib/data/calculators";
+import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
 type CategoryPageProps = {
   params: Promise<{ category: string }>;
 };
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://smartcalculatortools.com";
+const siteUrl = getSiteUrl();
 
 export async function generateMetadata(
   { params }: CategoryPageProps
@@ -23,25 +23,28 @@ export async function generateMetadata(
     };
   }
 
-  const title = `${category.name} Calculators | Smart Calculator Tools`;
+  const pageTitle = `${category.name} Calculators`;
+  const fullTitle = `${pageTitle} | ${siteName}`;
   const description = category.blurb;
   const url = `${siteUrl}/category/${category.id}`;
 
   return {
-    title,
+    title: pageTitle,
     description,
     alternates: {
       canonical: url,
     },
     openGraph: {
-      title,
+      title: fullTitle,
       description,
       url,
+      siteName,
+      locale: siteLocale,
       type: "website",
     },
     twitter: {
-      card: "summary",
-      title,
+      card: "summary_large_image",
+      title: fullTitle,
       description,
     },
   };

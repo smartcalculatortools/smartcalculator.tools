@@ -1,10 +1,9 @@
 import type { MetadataRoute } from "next";
 import { calculators, categories } from "@/lib/data/calculators";
-
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://smartcalculatortools.com";
+import { getSiteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const siteUrl = getSiteUrl();
   const lastModified = new Date();
   const staticRoutes = [
     "",

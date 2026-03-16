@@ -1,5 +1,13 @@
-﻿import SiteFooter from "@/components/SiteFooter";
+import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Terms of Use",
+  description:
+    "Calculators are provided for informational purposes only and do not replace professional advice.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

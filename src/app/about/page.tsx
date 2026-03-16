@@ -1,5 +1,13 @@
-﻿import SiteFooter from "@/components/SiteFooter";
+import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "About",
+  description:
+    "We build fast, clear calculators with modern UX, tested with reference cases and built for clarity.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

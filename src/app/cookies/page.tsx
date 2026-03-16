@@ -1,5 +1,13 @@
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Cookie Notice",
+  description:
+    "We use minimal cookies for stability and analytics, and we never store calculator inputs.",
+  path: "/cookies",
+});
 
 export default function CookiesPage() {
   return (

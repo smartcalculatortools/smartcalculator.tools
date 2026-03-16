@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+import type { Metadata } from "next";
+import Link from "next/link";
 import CategoryCard from "@/components/CategoryCard";
 import CalculatorCard from "@/components/CalculatorCard";
 import CalculatorSearch from "@/components/CalculatorSearch";
@@ -6,6 +7,30 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import ScientificCalculator from "@/components/calculators/ScientificCalculator";
 import { categories, calculators, getCalculatorsByCategory } from "@/lib/data/calculators";
+import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
+
+const siteUrl = getSiteUrl();
+
+export const metadata: Metadata = {
+  title: { absolute: siteName },
+  description: siteDescription,
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    title: siteName,
+    description: siteDescription,
+    url: siteUrl,
+    siteName,
+    locale: siteLocale,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteName,
+    description: siteDescription,
+  },
+};
 
 export default function Home() {
   const featured = calculators.slice(0, 8);
