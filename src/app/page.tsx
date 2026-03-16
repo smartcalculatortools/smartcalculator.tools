@@ -1,21 +1,13 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import CategoryCard from "@/components/CategoryCard";
 import CalculatorCard from "@/components/CalculatorCard";
 import CalculatorSearch from "@/components/CalculatorSearch";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import ScientificCalculator from "@/components/calculators/ScientificCalculator";
 import { categories, calculators, getCalculatorsByCategory } from "@/lib/data/calculators";
 import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
-
-const ScientificCalculatorLazy = dynamic(
-  () => import("@/components/calculators/ScientificCalculator"),
-  {
-    ssr: false,
-    loading: () => <ScientificCalculatorSkeleton />,
-  }
-);
 
 const siteUrl = getSiteUrl();
 
@@ -80,7 +72,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="mt-6">
-                <ScientificCalculatorLazy />
+                <ScientificCalculator />
               </div>
             </div>
           </div>
@@ -260,15 +252,6 @@ export default function Home() {
         </section>
       </main>
       <SiteFooter />
-    </div>
-  );
-}
-
-function ScientificCalculatorSkeleton() {
-  return (
-    <div className="grid gap-4" aria-hidden="true">
-      <div className="h-24 rounded-2xl border border-stroke bg-surface-2" />
-      <div className="h-[320px] rounded-2xl border border-stroke bg-surface-2" />
     </div>
   );
 }
