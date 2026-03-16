@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import CategoryCard from "@/components/CategoryCard";
 import CalculatorCard from "@/components/CalculatorCard";
 import CalculatorSearch from "@/components/CalculatorSearch";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import ScientificCalculator from "@/components/calculators/ScientificCalculator";
 import { categories, calculators, getCalculatorsByCategory } from "@/lib/data/calculators";
 import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
+
+const ScientificCalculatorLazy = dynamic(
+  () => import("@/components/calculators/ScientificCalculator"),
+  {
+    ssr: false,
+    loading: () => <ScientificCalculatorSkeleton />,
+  }
+);
 
 const siteUrl = getSiteUrl();
 
@@ -72,7 +80,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="mt-6">
-                <ScientificCalculator />
+                <ScientificCalculatorLazy />
               </div>
             </div>
           </div>
@@ -149,7 +157,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="categories" className="section-pad">
+        <section id="categories" className="section-pad cv-auto">
           <div className="mx-auto w-full max-w-6xl">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
@@ -172,7 +180,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section-pad">
+        <section className="section-pad cv-auto">
           <div className="mx-auto w-full max-w-6xl">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
@@ -191,7 +199,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section-pad">
+        <section className="section-pad cv-auto-large">
           <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="rounded-[32px] border border-stroke bg-surface p-8 shadow-soft">
               <p className="text-xs uppercase tracking-[0.4em] text-muted">Why this build</p>
@@ -252,6 +260,15 @@ export default function Home() {
         </section>
       </main>
       <SiteFooter />
+    </div>
+  );
+}
+
+function ScientificCalculatorSkeleton() {
+  return (
+    <div className="grid gap-4" aria-hidden="true">
+      <div className="h-24 rounded-2xl border border-stroke bg-surface-2" />
+      <div className="h-[320px] rounded-2xl border border-stroke bg-surface-2" />
     </div>
   );
 }

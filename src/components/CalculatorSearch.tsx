@@ -1,14 +1,15 @@
-﻿"use client";
+"use client";
 
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import Link from "next/link";
 import { calculators, categoryMap } from "@/lib/data/calculators";
 
 export default function CalculatorSearch() {
   const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
 
   const results = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
+    const normalized = deferredQuery.trim().toLowerCase();
     if (!normalized) return calculators.slice(0, 8);
 
     return calculators
@@ -24,7 +25,7 @@ export default function CalculatorSearch() {
         return haystack.includes(normalized);
       })
       .slice(0, 10);
-  }, [query]);
+  }, [deferredQuery]);
 
   return (
     <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">

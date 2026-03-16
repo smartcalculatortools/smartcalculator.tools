@@ -246,7 +246,7 @@ export default function CalculatorInteractive({
       </section>
 
       {content && (
-        <section className="section-pad-compact pt-0">
+        <section className="section-pad-compact pt-0 cv-auto-large">
           <div className="mx-auto w-full max-w-5xl">
             <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
               <h2 className="font-display text-2xl text-ink">
@@ -320,7 +320,7 @@ export default function CalculatorInteractive({
       )}
 
       {relatedCalculators.length > 0 && (
-        <section className="section-pad-compact pt-0">
+        <section className="section-pad-compact pt-0 cv-auto">
           <div className="mx-auto w-full max-w-5xl">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>

@@ -80,3 +80,13 @@ a {
     padding: 3.25rem 2.5rem;
   }
 }
+
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
+}
+
+.cv-auto-large {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 1200px;
+}
