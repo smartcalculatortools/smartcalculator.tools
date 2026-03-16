@@ -1,0 +1,89 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+import CalculatorCard from "@/components/CalculatorCard";
+import { categories, getCalculatorsByCategory } from "@/lib/data/calculators";
+
+type CategoryPageProps = {
+  params: Promise<{ category: string }>;
+};
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://smartcalculatortools.com";
+
+export async function generateMetadata(
+  { params }: CategoryPageProps
+): Promise<Metadata> {
+  const { category: categoryId } = await params;
+  const category = categories.find((item) => item.id === categoryId);
+  if (!category) {
+    return {
+      title: "Category not found",
+    };
+  }
+
+  const title = `${category.name} Calculators | Smart Calculator Tools`;
+  const description = category.blurb;
+  const url = `${siteUrl}/category/${category.id}`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category: categoryId } = await params;
+  const category = categories.find((item) => item.id === categoryId);
+  if (!category) {
+    notFound();
+  }
+
+  const calculators = getCalculatorsByCategory(category.id);
+
+  return (
+    <div className="min-h-screen">
+      <SiteHeader />
+      <main>
+        <section className="section-pad">
+          <div className="mx-auto w-full max-w-6xl">
+            <p className="text-xs uppercase tracking-[0.4em] text-muted">
+              {category.name}
+            </p>
+            <h1 className="mt-2 font-display text-4xl text-ink">
+              {category.name} calculators
+            </h1>
+            <p className="mt-4 max-w-2xl text-sm text-muted">
+              {category.blurb}
+            </p>
+          </div>
+        </section>
+        <section className="section-pad pt-0">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {calculators.map((calculator) => (
+                <CalculatorCard key={calculator.slug} calculator={calculator} />
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
