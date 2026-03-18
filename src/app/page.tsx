@@ -36,6 +36,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const featured = calculators.slice(0, 8);
+  const totalCalculators = calculators.length;
   const financialCount = getCalculatorsByCategory("financial").length;
   const fitnessCount = getCalculatorsByCategory("fitness").length;
   const mathCount = getCalculatorsByCategory("math").length;
@@ -109,8 +110,8 @@ export default function Home() {
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl border border-stroke bg-surface px-4 py-3">
-                  <p className="text-sm text-muted">Launch scope</p>
-                  <p className="text-xl font-semibold text-ink">20 calculators</p>
+                  <p className="text-sm text-muted">Library size</p>
+                  <p className="text-xl font-semibold text-ink">{totalCalculators} calculators</p>
                 </div>
                 <div className="rounded-2xl border border-stroke bg-surface px-4 py-3">
                   <p className="text-sm text-muted">New sections</p>
@@ -238,21 +239,21 @@ export default function Home() {
               </div>
             </div>
             <div className="rounded-[32px] border border-stroke bg-surface-2 p-8 shadow-soft">
-              <p className="text-xs uppercase tracking-[0.4em] text-muted">Launch plan</p>
-              <h3 className="mt-3 font-display text-2xl text-ink">20-calculator MVP</h3>
+              <p className="text-xs uppercase tracking-[0.4em] text-muted">Current scope</p>
+              <h3 className="mt-3 font-display text-2xl text-ink">{totalCalculators}-calculator library</h3>
               <p className="mt-4 text-sm text-muted">
-                Designed for speed, ready to scale fast. We build the core set and
-                expand in waves.
+                Started as a focused MVP, then expanded into a broader library with the same
+                tested structure and content depth.
               </p>
               <div className="mt-6 space-y-3">
                 <div className="rounded-2xl border border-stroke bg-white/70 px-4 py-3 text-sm text-ink">
                   Week 1-2: Core engine + templates
                 </div>
                 <div className="rounded-2xl border border-stroke bg-white/70 px-4 py-3 text-sm text-ink">
-                  Week 3-4: 20 calculators delivered
+                  Week 3-4: MVP shipped on the domain
                 </div>
                 <div className="rounded-2xl border border-stroke bg-white/70 px-4 py-3 text-sm text-ink">
-                  Week 5-6: QA + launch polish
+                  Week 5-6: Library expansion + QA
                 </div>
               </div>
             </div>

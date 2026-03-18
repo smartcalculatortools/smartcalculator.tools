@@ -1,3 +1,5 @@
+import { generatedCalculatorContent } from "@/lib/data/configurableCalculators/index";
+
 export type ExampleCase = {
   title: string;
   inputs: string[];
@@ -40,7 +42,7 @@ export type CalculatorContent = {
   chart?: InsightChart;
 };
 
-export const calculatorContent: Record<string, CalculatorContent> = {
+const staticCalculatorContent: Record<string, CalculatorContent> = {
   mortgage: {
     summary:
       "Estimates fixed-rate mortgage payments and blends in escrow costs such as property taxes, insurance, and HOA. It also models extra monthly payments so you can see interest saved, payoff time, and a full amortization schedule.",
@@ -1771,4 +1773,9 @@ bmi: {
       note: "Use this as a quick check before deeper evaluation.",
     },
   },
+};
+
+export const calculatorContent: Record<string, CalculatorContent> = {
+  ...staticCalculatorContent,
+  ...generatedCalculatorContent,
 };

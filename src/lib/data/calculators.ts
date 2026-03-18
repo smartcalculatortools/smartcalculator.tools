@@ -1,4 +1,5 @@
-﻿export type CategoryId =
+import { configurableCalculators } from "@/lib/data/configurableCalculators/index";
+export type CategoryId =
   | "financial"
   | "fitness"
   | "math"
@@ -60,7 +61,7 @@ export const categories: Category[] = [
   },
 ];
 
-export const calculators: Calculator[] = [
+const coreCalculators: Calculator[] = [
   {
     slug: "mortgage",
     name: "Mortgage Calculator",
@@ -203,6 +204,8 @@ export const calculators: Calculator[] = [
   },
 ];
 
+export const calculators: Calculator[] = [...coreCalculators, ...configurableCalculators];
+
 export const categoryMap = new Map(
   categories.map((category) => [category.id, category])
 );
@@ -214,3 +217,5 @@ export function getCalculatorsByCategory(categoryId: CategoryId) {
 export function getCalculator(slug: string) {
   return calculators.find((calc) => calc.slug === slug) ?? null;
 }
+
+

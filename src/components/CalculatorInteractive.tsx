@@ -28,12 +28,14 @@ import CryptoDcaCalculator from "@/components/calculators/CryptoDcaCalculator";
 import CryptoFeeImpactCalculator from "@/components/calculators/CryptoFeeImpactCalculator";
 import AiTokenCostCalculator from "@/components/calculators/AiTokenCostCalculator";
 import AiModelComparatorCalculator from "@/components/calculators/AiModelComparatorCalculator";
+import ConfigurableCalculator from "@/components/calculators/ConfigurableCalculator";
 import type {
   CalculatorContent,
   ExampleCase,
   InsightChart,
   ReferenceTable,
 } from "@/lib/data/calculatorContent";
+import { getConfigurableCalculatorDefinition } from "@/lib/data/configurableCalculators/index";
 import { buildFaqItems } from "@/lib/faq";
 import type { CalculatorInsights } from "@/lib/insights";
 
@@ -124,7 +126,19 @@ function getCalculatorComponent(
   onInsightsChange: (insights: CalculatorInsights) => void
 ) {
   const Component = calculatorComponents[slug];
-  return Component ? <Component onInsightsChange={onInsightsChange} /> : null;
+  if (Component) {
+    return <Component onInsightsChange={onInsightsChange} />;
+  }
+  if (getConfigurableCalculatorDefinition(slug)) {
+    return (
+      <ConfigurableCalculator
+        key={slug}
+        slug={slug}
+        onInsightsChange={onInsightsChange}
+      />
+    );
+  }
+  return null;
 }
 
 export default function CalculatorInteractive({
