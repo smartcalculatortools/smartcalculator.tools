@@ -246,13 +246,13 @@ export default function Home() {
               </p>
               <div className="mt-6 space-y-3">
                 <div className="rounded-2xl border border-stroke bg-white/70 px-4 py-3 text-sm text-ink">
-                  Week 1–2: Core engine + templates
+                  Week 1-2: Core engine + templates
                 </div>
                 <div className="rounded-2xl border border-stroke bg-white/70 px-4 py-3 text-sm text-ink">
-                  Week 3–4: 20 calculators delivered
+                  Week 3-4: 20 calculators delivered
                 </div>
                 <div className="rounded-2xl border border-stroke bg-white/70 px-4 py-3 text-sm text-ink">
-                  Week 5–6: QA + launch polish
+                  Week 5-6: QA + launch polish
                 </div>
               </div>
             </div>
@@ -263,3 +263,4 @@ export default function Home() {
     </div>
   );
 }
+

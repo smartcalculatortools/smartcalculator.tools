@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import CalculatorCard from "@/components/CalculatorCard";
+import CalculatorSearch from "@/components/CalculatorSearch";
 import { categories, getCalculatorsByCategory } from "@/lib/data/calculators";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
@@ -78,11 +78,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </section>
         <section className="section-pad pt-0">
           <div className="mx-auto w-full max-w-6xl">
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {calculators.map((calculator) => (
-                <CalculatorCard key={calculator.slug} calculator={calculator} />
-              ))}
-            </div>
+            <CalculatorSearch
+              calculators={calculators}
+              layout="grid"
+              lockedCategoryId={category.id}
+              title={`Find a ${category.name} calculator`}
+              description="Search by keyword or narrow the list with the tags used in this category."
+              placeholder={`Search ${category.name.toLowerCase()} calculators`}
+            />
           </div>
         </section>
       </main>

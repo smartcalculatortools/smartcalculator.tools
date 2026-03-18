@@ -1,5 +1,5 @@
-﻿import Link from "next/link";
-import type { Calculator } from "@/lib/data/calculators";
+import Link from "next/link";
+import { categoryMap, type Calculator } from "@/lib/data/calculators";
 
 export default function CalculatorCard({
   calculator,
@@ -13,7 +13,7 @@ export default function CalculatorCard({
     >
       <div>
         <p className="text-xs uppercase tracking-[0.3em] text-muted">
-          {calculator.category}
+          {categoryMap.get(calculator.category)?.name ?? calculator.category}
         </p>
         <h4 className="mt-2 text-lg font-semibold text-ink">
           {calculator.name}
