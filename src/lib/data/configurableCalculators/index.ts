@@ -5,19 +5,31 @@ import {
   formatConfiguredValue,
   getDefaultValues,
 } from "./base";
+import { aiGrowthCalculatorDefinitions } from "./aiGrowth";
 import type { CalculatorValues } from "./base";
 import { aiCalculatorDefinitions } from "./ai";
+import { cryptoGrowthCalculatorDefinitions } from "./cryptoGrowth";
 import { cryptoCalculatorDefinitions } from "./crypto";
 import { financialCalculatorDefinitions } from "./financial";
+import { financialGrowthCalculatorDefinitions } from "./financialGrowth";
 import { fitnessCalculatorDefinitions } from "./fitness";
+import { fitnessGrowthCalculatorDefinitions } from "./fitnessGrowth";
 import { mathCalculatorDefinitions } from "./math";
+import { mathGrowthCalculatorDefinitions } from "./mathGrowth";
+import { otherCalculatorDefinitions } from "./other";
 
 export const configurableCalculatorDefinitions = [
   ...financialCalculatorDefinitions,
+  ...financialGrowthCalculatorDefinitions,
   ...fitnessCalculatorDefinitions,
+  ...fitnessGrowthCalculatorDefinitions,
   ...mathCalculatorDefinitions,
+  ...mathGrowthCalculatorDefinitions,
+  ...otherCalculatorDefinitions,
   ...cryptoCalculatorDefinitions,
+  ...cryptoGrowthCalculatorDefinitions,
   ...aiCalculatorDefinitions,
+  ...aiGrowthCalculatorDefinitions,
 ];
 
 export const configurableCalculators = configurableCalculatorDefinitions.map(

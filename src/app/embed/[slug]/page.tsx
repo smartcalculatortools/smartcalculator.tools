@@ -20,7 +20,9 @@ import CryptoDcaCalculator from "@/components/calculators/CryptoDcaCalculator";
 import CryptoFeeImpactCalculator from "@/components/calculators/CryptoFeeImpactCalculator";
 import AiTokenCostCalculator from "@/components/calculators/AiTokenCostCalculator";
 import AiModelComparatorCalculator from "@/components/calculators/AiModelComparatorCalculator";
+import ConfigurableCalculator from "@/components/calculators/ConfigurableCalculator";
 import { getCalculator } from "@/lib/data/calculators";
+import { getConfigurableCalculatorDefinition } from "@/lib/data/configurableCalculators/index";
 
 export const metadata: Metadata = {
   title: "Embed",
@@ -77,7 +79,7 @@ function getCalculatorComponent(slug: string) {
     case "ai-model-comparator":
       return <AiModelComparatorCalculator />;
     default:
-      return null;
+      return getConfigurableCalculatorDefinition(slug) ? <ConfigurableCalculator slug={slug} /> : null;
   }
 }
 
