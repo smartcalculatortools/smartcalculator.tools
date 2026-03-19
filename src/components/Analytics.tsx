@@ -20,7 +20,10 @@ export default function Analytics() {
     if (!gaId) return;
     const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
     if (!gtag) return;
-    gtag("config", gaId, { page_path: buildPagePath(pathname, search) });
+    gtag("event", "page_view", {
+      page_path: buildPagePath(pathname, search),
+      page_title: document.title,
+    });
   }, [pathname, search]);
 
   if (!gaId) return null;
@@ -35,7 +38,7 @@ export default function Analytics() {
         {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', '${gaId}');`}
+gtag('config', '${gaId}', { send_page_view: false });`}
       </Script>
     </>
   );

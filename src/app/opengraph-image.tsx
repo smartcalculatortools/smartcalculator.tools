@@ -1,7 +1,5 @@
 import { ImageResponse } from "next/og";
 import { getSiteUrl, siteDescription, siteName } from "@/lib/site";
-
-export const runtime = "edge";
 export const size = {
   width: 1200,
   height: 630,
@@ -50,7 +48,7 @@ export default function OpenGraphImage() {
         <div
           style={{
             marginTop: 40,
-            display: "inline-flex",
+            display: "flex",
             alignItems: "center",
             gap: 12,
             fontSize: 20,

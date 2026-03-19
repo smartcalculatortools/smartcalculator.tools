@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Calculator Tools
 
-## Getting Started
+Modern calculator library built with Next.js App Router.
 
-First, run the development server:
+The project serves focused calculators across:
+- Financial
+- Fitness & Health
+- Math
+- Other utilities
+- Crypto
+- AI
+
+Production domain: `https://smartcalculatortools.net`
+
+## Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build production output:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Start the production server locally:
 
-## Learn More
+```bash
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run quality checks:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+npm test
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment variables
 
-## Deploy on Vercel
+Create `.env.local` and set the values you need:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```env
+NEXT_PUBLIC_SITE_URL=https://smartcalculatortools.net
+NEXT_PUBLIC_GA_ID=
+NEXT_PUBLIC_ADSENSE_CLIENT=
+NEXT_PUBLIC_ADSENSE_SLOT_HOME=
+NEXT_PUBLIC_ADSENSE_SLOT_CALC=
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Optional deployment tokens used in local automation:
+
+```env
+VERCEL_TOKEN=
+GITHUB_TOKEN=
+CLOUDFLARE_API_TOKEN=
+```
+
+## Project notes
+
+- SEO metadata, canonical URLs, sitemap, and robots are generated from `src/lib/site.ts`.
+- Google Analytics is optional and disabled when `NEXT_PUBLIC_GA_ID` is missing.
+- AdSense placements fail open and render placeholders when ad variables are missing.
+- Personalized recommendations use lightweight browser-local usage signals only.
+
+## Main scripts
+
+- `npm run dev` — development server
+- `npm run build` — production build
+- `npm run start` — serve the built app
+- `npm run lint` — ESLint checks
+- `npm test` — Vitest suite
+- `npm run perf:local` — local performance check script

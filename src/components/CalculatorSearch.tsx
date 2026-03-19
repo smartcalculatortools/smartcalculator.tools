@@ -175,11 +175,17 @@ export default function CalculatorSearch({
       <h2 className="mt-3 font-display text-2xl text-ink">{title}</h2>
       <p className="mt-2 text-sm text-muted">{description}</p>
       <div className="mt-5">
+        <label htmlFor="calculator-search" className="sr-only">
+          Search calculators
+        </label>
         <input
-          type="text"
+          id="calculator-search"
+          type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder={placeholder}
+          aria-label="Search calculators"
+          autoComplete="off"
           className="w-full rounded-2xl border border-stroke bg-white/70 px-4 py-3 text-base text-ink"
         />
       </div>

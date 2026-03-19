@@ -1,4 +1,4 @@
-const defaultSiteUrl = "https://smartcalculator-tools.vercel.app";
+const defaultSiteUrl = "https://smartcalculatortools.net";
 
 export const siteName = "Smart Calculator Tools";
 export const siteDescription =
@@ -13,7 +13,11 @@ function normalizeSiteUrl(rawUrl: string): string {
 }
 
 export function getSiteUrl(): string {
-  const envUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.VERCEL_URL;
-  if (!envUrl) return defaultSiteUrl;
+  const envUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    process.env.SITE_URL ??
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
+    defaultSiteUrl;
+
   return normalizeSiteUrl(envUrl);
 }
