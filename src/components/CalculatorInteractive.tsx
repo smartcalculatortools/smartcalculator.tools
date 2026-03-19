@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatCurrency, formatNumber } from "@/lib/calculators/format";
 import { AdSlot } from "@/components/Ads";
 import CalculatorCard from "@/components/CalculatorCard";
+import CalculatorUsageTracker from "@/components/CalculatorUsageTracker";
 import { adSlots } from "@/lib/ads";
 import { calculators } from "@/lib/data/calculators";
 import type { Calculator, Category } from "@/lib/data/calculators";
@@ -251,6 +252,7 @@ export default function CalculatorInteractive({
 
   return (
     <main>
+      <CalculatorUsageTracker calculator={calculator} />
       <section className="pt-4 pb-3 sm:pt-8 sm:pb-5">
         <div className="mx-auto w-full max-w-5xl">
           <p className="text-xs uppercase tracking-[0.4em] text-muted">

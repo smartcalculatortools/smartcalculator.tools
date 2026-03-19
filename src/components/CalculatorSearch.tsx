@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import CalculatorCard from "@/components/CalculatorCard";
 import {
@@ -10,6 +10,17 @@ import {
   type Calculator,
   type CategoryId,
 } from "@/lib/data/calculators";
+import {
+  getRecentCalculators,
+  recordSearchUsage,
+  sortCalculatorsByUsage,
+  createEmptyUsageState,
+} from "@/lib/usage";
+import {
+  readStoredUsageState,
+  subscribeToUsageState,
+  updateStoredUsageState,
+} from "@/lib/usageStorage";
 
 type CalculatorSearchProps = {
   calculators?: Calculator[];
@@ -45,8 +56,14 @@ export default function CalculatorSearch({
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<CategoryId | "all">("all");
   const [selectedTag, setSelectedTag] = useState<string>("all");
+  const recordedSearchRef = useRef<string>("");
   const deferredQuery = useDeferredValue(query);
   const activeCategory = lockedCategoryId ?? selectedCategory;
+  const usageState = useSyncExternalStore(
+    subscribeToUsageState,
+    readStoredUsageState,
+    createEmptyUsageState
+  );
 
   const categoryFiltered = useMemo(() => {
     if (activeCategory === "all") return calculators;
@@ -76,7 +93,7 @@ export default function CalculatorSearch({
   const filteredResults = useMemo(() => {
     const normalized = deferredQuery.trim().toLowerCase();
 
-    return categoryFiltered.filter((calculator) => {
+    const results = categoryFiltered.filter((calculator) => {
       if (activeTag !== "all" && !calculator.tags.includes(activeTag)) {
         return false;
       }
@@ -84,7 +101,13 @@ export default function CalculatorSearch({
       if (!normalized) return true;
       return buildSearchText(calculator).includes(normalized);
     });
-  }, [activeTag, categoryFiltered, deferredQuery]);
+
+    if (normalized || activeTag !== "all") {
+      return results;
+    }
+
+    return sortCalculatorsByUsage(usageState, results);
+  }, [activeTag, categoryFiltered, deferredQuery, usageState]);
 
   const hasActiveFilters =
     query.trim().length > 0 ||
@@ -96,6 +119,16 @@ export default function CalculatorSearch({
     const resultLimit = hasActiveFilters ? Math.max(maxResults, 10) : maxResults;
     return filteredResults.slice(0, resultLimit);
   }, [filteredResults, hasActiveFilters, layout, maxResults]);
+
+  const recentSlugs = useMemo(
+    () => new Set(getRecentCalculators(usageState, calculators, { limit: 6 }).map((item) => item.slug)),
+    [calculators, usageState]
+  );
+
+  const showPersonalizedHint =
+    deferredQuery.trim().length === 0 &&
+    activeTag === "all" &&
+    [...recentSlugs].some((slug) => visibleResults.some((calculator) => calculator.slug === slug));
 
   const countLabel =
     filteredResults.length === 1
@@ -109,6 +142,32 @@ export default function CalculatorSearch({
     setSelectedTag("all");
     setSelectedCategory(defaultCategory);
   }
+
+  useEffect(() => {
+    const normalizedQuery = deferredQuery.trim().toLowerCase();
+    const shouldTrack =
+      normalizedQuery.length >= 2 ||
+      activeTag !== "all" ||
+      (!lockedCategoryId && activeCategory !== "all");
+
+    if (!shouldTrack) {
+      return;
+    }
+
+    const trackingKey = `${normalizedQuery}|${activeCategory}|${activeTag}`;
+    if (recordedSearchRef.current === trackingKey) {
+      return;
+    }
+
+    recordedSearchRef.current = trackingKey;
+    updateStoredUsageState((state) =>
+      recordSearchUsage(state, {
+        query: normalizedQuery,
+        categoryId: activeCategory,
+        tag: activeTag,
+      })
+    );
+  }, [activeCategory, activeTag, deferredQuery, lockedCategoryId]);
 
   return (
     <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
@@ -186,6 +245,11 @@ export default function CalculatorSearch({
           </p>
         )}
       </div>
+      {showPersonalizedHint && (
+        <p className="mt-2 text-xs text-muted">
+          Recently used calculators float to the top when no keyword is active.
+        </p>
+      )}
 
       {visibleResults.length === 0 ? (
         <div className="mt-4 rounded-2xl border border-dashed border-stroke bg-white/50 px-4 py-6 text-center">
@@ -209,7 +273,14 @@ export default function CalculatorSearch({
               className="flex items-center justify-between rounded-2xl border border-stroke/80 bg-white/70 px-4 py-3 text-sm text-ink transition hover:-translate-y-0.5"
             >
               <div>
-                <p className="text-sm font-semibold text-ink">{calculator.name}</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold text-ink">{calculator.name}</p>
+                  {recentSlugs.has(calculator.slug) && (
+                    <span className="rounded-full border border-stroke px-2 py-0.5 text-[10px] uppercase tracking-[0.2em] text-muted">
+                      Recent
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-muted">
                   {categoryMap.get(calculator.category)?.name}
                 </p>

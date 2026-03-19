@@ -6,6 +6,7 @@ import CalculatorSearch from "@/components/CalculatorSearch";
 import { AdSlot } from "@/components/Ads";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import UsageHighlights from "@/components/UsageHighlights";
 import ScientificCalculator from "@/components/calculators/ScientificCalculator";
 import { adSlots } from "@/lib/ads";
 import { categories, calculators, getCalculatorsByCategory } from "@/lib/data/calculators";
@@ -151,6 +152,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <UsageHighlights />
 
         <section className="section-pad cv-auto">
           <div className="mx-auto w-full max-w-6xl">

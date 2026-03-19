@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import CalculatorSearch from "@/components/CalculatorSearch";
+import UsageHighlights from "@/components/UsageHighlights";
 import { categories, getCalculatorsByCategory } from "@/lib/data/calculators";
 import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
@@ -100,6 +101,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             ) : null}
           </div>
         </section>
+        <UsageHighlights categoryId={category.id} />
         <section className="section-pad pt-0">
           <div className="mx-auto w-full max-w-6xl">
             <CalculatorSearch
