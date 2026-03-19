@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms",
     "/cookies",
     "/widgets",
+    "/learn",
   ];
 
   return [
@@ -21,6 +22,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...categories.map((category) => ({
       url: `${siteUrl}/category/${category.id}`,
+      lastModified,
+    })),
+    ...categories.map((category) => ({
+      url: `${siteUrl}/learn/${category.id}`,
       lastModified,
     })),
     ...calculators.map((calculator) => ({

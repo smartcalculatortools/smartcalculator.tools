@@ -4,7 +4,9 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import CalculatorSearch from "@/components/CalculatorSearch";
 import { categories, getCalculatorsByCategory } from "@/lib/data/calculators";
+import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
+import Link from "next/link";
 
 type CategoryPageProps = {
   params: Promise<{ category: string }>;
@@ -58,6 +60,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   const calculators = getCalculatorsByCategory(category.id);
+  const guide = getLearningGuide(category.id);
 
   return (
     <div className="min-h-screen">
@@ -74,6 +77,27 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <p className="mt-4 max-w-2xl text-sm text-muted">
               {category.blurb}
             </p>
+            {guide ? (
+              <div className="mt-6 rounded-3xl border border-stroke bg-surface p-5 shadow-soft">
+                <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                  Learn the category
+                </p>
+                <h2 className="mt-2 font-display text-2xl text-ink">
+                  {guide.title}
+                </h2>
+                <p className="mt-3 max-w-3xl text-sm text-muted">
+                  {guide.summary}
+                </p>
+                <div className="mt-4">
+                  <Link
+                    href={`/learn/${category.id}`}
+                    className="rounded-full border border-stroke px-4 py-2 text-sm text-ink"
+                  >
+                    Read the guide
+                  </Link>
+                </div>
+              </div>
+            ) : null}
           </div>
         </section>
         <section className="section-pad pt-0">

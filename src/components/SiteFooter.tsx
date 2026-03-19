@@ -29,6 +29,9 @@ export default function SiteFooter() {
           <Link href="/widgets" className="hover:text-ink">
             Widgets
           </Link>
+          <Link href="/learn" className="hover:text-ink">
+            Learn
+          </Link>
           <Link href="/privacy" className="hover:text-ink">
             Privacy
           </Link>

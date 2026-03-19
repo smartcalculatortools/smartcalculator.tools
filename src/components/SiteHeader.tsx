@@ -27,6 +27,9 @@ export default function SiteHeader() {
           <Link href="/widgets" className="transition-colors hover:text-ink">
             Widgets
           </Link>
+          <Link href="/learn" className="transition-colors hover:text-ink">
+            Learn
+          </Link>
           <Link href="/about" className="transition-colors hover:text-ink">
             About
           </Link>
