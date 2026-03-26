@@ -56,25 +56,27 @@ describe("calculator content standards", () => {
 
       expect(content.table, `${calc.slug} table`).toBeTruthy();
       if (content.table) {
-        expect(content.table.columns.length).toBeGreaterThanOrEqual(minTableColumns);
-        expect(content.table.rows.length).toBeGreaterThanOrEqual(minTableRows);
-        content.table.rows.forEach((row) => {
-          expect(row.length).toBe(content.table.columns.length);
+        const table = content.table;
+        expect(table.columns.length).toBeGreaterThanOrEqual(minTableColumns);
+        expect(table.rows.length).toBeGreaterThanOrEqual(minTableRows);
+        table.rows.forEach((row) => {
+          expect(row.length).toBe(table.columns.length);
           row.forEach((cell) => {
             expect(cell.length).toBeGreaterThanOrEqual(minTableCellLength);
           });
         });
-        expect(content.table.note && content.table.note.length).toBeGreaterThanOrEqual(minExampleNoteLength);
+        expect(table.note && table.note.length).toBeGreaterThanOrEqual(minExampleNoteLength);
       }
 
       expect(content.chart, `${calc.slug} chart`).toBeTruthy();
       if (content.chart) {
-        expect(content.chart.points.length).toBeGreaterThanOrEqual(minChartPoints);
-        content.chart.points.forEach((point) => {
+        const chart = content.chart;
+        expect(chart.points.length).toBeGreaterThanOrEqual(minChartPoints);
+        chart.points.forEach((point) => {
           expect(point.label.length).toBeGreaterThanOrEqual(1);
           expect(Number.isFinite(point.value)).toBe(true);
         });
-        expect(content.chart.note && content.chart.note.length).toBeGreaterThanOrEqual(minExampleNoteLength);
+        expect(chart.note && chart.note.length).toBeGreaterThanOrEqual(minExampleNoteLength);
       }
     });
   });
