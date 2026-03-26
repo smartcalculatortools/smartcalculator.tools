@@ -9,7 +9,7 @@ describe("calculator catalog", () => {
   });
 
   it("reaches the expanded library target", () => {
-    expect(calculators.length).toBeGreaterThanOrEqual(60);
+    expect(calculators.length).toBeGreaterThanOrEqual(100);
   });
 
   it("keeps every category populated", () => {

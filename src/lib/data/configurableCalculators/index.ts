@@ -12,20 +12,30 @@ import { cryptoGrowthCalculatorDefinitions } from "./cryptoGrowth";
 import { cryptoCalculatorDefinitions } from "./crypto";
 import { financialCalculatorDefinitions } from "./financial";
 import { financialGrowthCalculatorDefinitions } from "./financialGrowth";
+import { financialBatch2Definitions } from "./financialBatch2";
+import { financialBatch3Definitions } from "./financialBatch3";
 import { fitnessCalculatorDefinitions } from "./fitness";
 import { fitnessGrowthCalculatorDefinitions } from "./fitnessGrowth";
+import { fitnessBatch2Definitions } from "./fitnessBatch2";
 import { mathCalculatorDefinitions } from "./math";
 import { mathGrowthCalculatorDefinitions } from "./mathGrowth";
+import { mathBatch2Definitions } from "./mathBatch2";
 import { otherCalculatorDefinitions } from "./other";
+import { otherBatch2Definitions } from "./otherBatch2";
 
 export const configurableCalculatorDefinitions = [
   ...financialCalculatorDefinitions,
   ...financialGrowthCalculatorDefinitions,
+  ...financialBatch2Definitions,
+  ...financialBatch3Definitions,
   ...fitnessCalculatorDefinitions,
   ...fitnessGrowthCalculatorDefinitions,
+  ...fitnessBatch2Definitions,
   ...mathCalculatorDefinitions,
   ...mathGrowthCalculatorDefinitions,
+  ...mathBatch2Definitions,
   ...otherCalculatorDefinitions,
+  ...otherBatch2Definitions,
   ...cryptoCalculatorDefinitions,
   ...cryptoGrowthCalculatorDefinitions,
   ...aiCalculatorDefinitions,
