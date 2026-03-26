@@ -17,20 +17,38 @@ function notifyUsageSubscribers(state: UsageState) {
   window.dispatchEvent(new CustomEvent<UsageState>(usageEventName, { detail: state }));
 }
 
+let cachedSnapshot: UsageState | null = null;
+let cachedRawValue: string | null = null;
+
 export function readStoredUsageState() {
   if (!canUseBrowserStorage()) {
-    return createEmptyUsageState();
+    if (!cachedSnapshot) cachedSnapshot = createEmptyUsageState();
+    return cachedSnapshot;
   }
 
   try {
     const rawValue = window.localStorage.getItem(storageKey);
     if (!rawValue) {
-      return createEmptyUsageState();
+      if (!cachedSnapshot || cachedRawValue !== null) {
+        cachedSnapshot = createEmptyUsageState();
+        cachedRawValue = null;
+      }
+      return cachedSnapshot;
     }
 
-    return normalizeUsageState(JSON.parse(rawValue));
+    if (rawValue === cachedRawValue && cachedSnapshot) {
+      return cachedSnapshot;
+    }
+
+    cachedSnapshot = normalizeUsageState(JSON.parse(rawValue));
+    cachedRawValue = rawValue;
+    return cachedSnapshot;
   } catch {
-    return createEmptyUsageState();
+    if (!cachedSnapshot || cachedRawValue !== null) {
+      cachedSnapshot = createEmptyUsageState();
+      cachedRawValue = null;
+    }
+    return cachedSnapshot;
   }
 }
 
