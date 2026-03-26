@@ -98,7 +98,7 @@ export const mathBatch2Definitions: ConfigurableCalculatorDefinition[] = [
       { key: "product", label: "Product", format: "number", description: "Product of the two numbers." },
     ],
     compute: (i) => {
-      let a = Math.abs(Math.round(i.num1)) || 1, b = Math.abs(Math.round(i.num2)) || 1;
+      const a = Math.abs(Math.round(i.num1)) || 1, b = Math.abs(Math.round(i.num2)) || 1;
       const product = a * b;
       let tempA = a, tempB = b;
       while (tempB) { const t = tempB; tempB = tempA % tempB; tempA = t; }
@@ -120,7 +120,7 @@ export const mathBatch2Definitions: ConfigurableCalculatorDefinition[] = [
       { key: "ratio", label: "LCM/GCF ratio", format: "number", description: "Ratio of LCM to GCF." },
     ],
     compute: (i) => {
-      let a = Math.abs(Math.round(i.num1)) || 1, b = Math.abs(Math.round(i.num2)) || 1;
+      const a = Math.abs(Math.round(i.num1)) || 1, b = Math.abs(Math.round(i.num2)) || 1;
       let tempA = a, tempB = b;
       while (tempB) { const t = tempB; tempB = tempA % tempB; tempA = t; }
       const gcf = tempA, lcm = safeDivide(a * b, gcf);
