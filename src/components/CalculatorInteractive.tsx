@@ -44,6 +44,7 @@ type CalculatorInteractiveProps = {
   calculator: Calculator;
   category?: Category;
   content?: CalculatorContent;
+  isEmbed?: boolean;
 };
 
 type CalculatorComponentProps = {
@@ -142,15 +143,19 @@ function getCalculatorComponent(
   return null;
 }
 
+import EmbedModal from "@/components/EmbedModal";
+
 export default function CalculatorInteractive({
   calculator,
   category,
   content,
+  isEmbed = false,
 }: CalculatorInteractiveProps) {
   const [insights, setInsights] = useState<CalculatorInsights>({});
   const [resetKey, setResetKey] = useState(0);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
   const [copiedExampleTitle, setCopiedExampleTitle] = useState<string | null>(null);
+  const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
 
   const handleInsightsChange = useCallback((next: CalculatorInsights) => {
     setInsights(next);
@@ -251,8 +256,8 @@ export default function CalculatorInteractive({
   );
 
   return (
-    <main>
-      <CalculatorUsageTracker calculator={calculator} />
+    <main className={isEmbed ? "p-4 sm:p-6" : ""}>
+      {!isEmbed && <CalculatorUsageTracker calculator={calculator} />}
       <section className="pt-4 pb-3 sm:pt-8 sm:pb-5">
         <div className="mx-auto w-full max-w-5xl">
           <p className="text-xs uppercase tracking-[0.4em] text-muted">
@@ -265,12 +270,14 @@ export default function CalculatorInteractive({
             {calculator.blurb}
           </p>
           <div className="mt-3 flex flex-wrap gap-3">
-            <Link
-              href={`/category/${calculator.category}`}
-              className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
-            >
-              Back to {category?.name}
-            </Link>
+            {!isEmbed && (
+              <Link
+                href={`/category/${calculator.category}`}
+                className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
+              >
+                Back to {category?.name}
+              </Link>
+            )}
             <button
               type="button"
               onClick={handleReset}
@@ -278,20 +285,33 @@ export default function CalculatorInteractive({
             >
               Reset
             </button>
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
-            >
-              Print
-            </button>
-            <button
-              type="button"
-              onClick={handleCopyLink}
-              className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
-            >
-              Copy link
-            </button>
+            {!isEmbed && (
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
+              >
+                Print
+              </button>
+            )}
+            {!isEmbed && (
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
+              >
+                Copy link
+              </button>
+            )}
+            {!isEmbed && (
+              <button
+                type="button"
+                onClick={() => setIsEmbedModalOpen(true)}
+                className="rounded-full border border-stroke px-4 py-2 text-xs font-semibold text-accent transition hover:bg-accent/5"
+              >
+                Embed
+              </button>
+            )}
             {copyState === "copied" && (
               <span className="rounded-full bg-accent/10 px-4 py-2 text-xs text-ink">
                 Link copied
@@ -320,13 +340,15 @@ export default function CalculatorInteractive({
         </div>
       </section>
 
-      <section className="section-pad-compact pt-0 cv-auto">
-        <div className="mx-auto w-full max-w-5xl">
-          <AdSlot slot={adSlots.calculator} minHeight={250} />
-        </div>
-      </section>
+      {!isEmbed && (
+        <section className="section-pad-compact pt-0 cv-auto">
+          <div className="mx-auto w-full max-w-5xl">
+            <AdSlot slot={adSlots.calculator} minHeight={250} />
+          </div>
+        </section>
+      )}
 
-      {content && (
+      {content && !isEmbed && (
         <section className="section-pad-compact pt-0 cv-auto-large">
           <div className="mx-auto w-full max-w-5xl">
             <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
@@ -458,8 +480,9 @@ export default function CalculatorInteractive({
         </section>
       )}
 
-      <section className="section-pad-compact pt-0 cv-auto">
-        <div className="mx-auto w-full max-w-5xl">
+      {!isEmbed && (
+        <section className="section-pad-compact pt-0 cv-auto">
+          <div className="mx-auto w-full max-w-5xl">
           <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
             <p className="text-xs uppercase tracking-[0.4em] text-muted">FAQ</p>
             <h2 className="mt-2 font-display text-2xl text-ink">
@@ -480,9 +503,10 @@ export default function CalculatorInteractive({
             </div>
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
-      {relatedCalculators.length > 0 && (
+      {relatedCalculators.length > 0 && !isEmbed && (
         <section className="section-pad-compact pt-0 cv-auto">
           <div className="mx-auto w-full max-w-5xl">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -508,6 +532,13 @@ export default function CalculatorInteractive({
             </div>
           </div>
         </section>
+      )}
+      {!isEmbed && (
+        <EmbedModal 
+          calculator={calculator} 
+          isOpen={isEmbedModalOpen} 
+          onClose={() => setIsEmbedModalOpen(false)} 
+        />
       )}
     </main>
   );
