@@ -91,6 +91,30 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
       },
     })),
   };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: `${category?.name ?? "Calculators"} Calculators`,
+        item: `${siteUrl}/category/${calculator.category}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: calculator.name,
+        item: `${siteUrl}/calc/${calculator.slug}`,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen">
@@ -102,6 +126,10 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <CalculatorInteractive
         calculator={calculator}

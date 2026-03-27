@@ -16,21 +16,37 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return [
-    ...staticRoutes.map((path) => ({
-      url: `${siteUrl}${path}`,
+    {
+      url: siteUrl,
       lastModified,
-    })),
+      changeFrequency: "weekly" as const,
+      priority: 1.0,
+    },
+    ...staticRoutes
+      .filter((p) => p !== "")
+      .map((path) => ({
+        url: `${siteUrl}${path}`,
+        lastModified,
+        changeFrequency: "monthly" as const,
+        priority: 0.4,
+      })),
     ...categories.map((category) => ({
       url: `${siteUrl}/category/${category.id}`,
       lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
     })),
     ...categories.map((category) => ({
       url: `${siteUrl}/learn/${category.id}`,
       lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
     ...calculators.map((calculator) => ({
       url: `${siteUrl}/calc/${calculator.slug}`,
       lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.8,
     })),
   ];
 }

@@ -63,9 +63,32 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const calculators = getCalculatorsByCategory(category.id);
   const guide = getLearningGuide(category.id);
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: `${category.name} Calculators`,
+        item: `${siteUrl}/category/${category.id}`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <main>
         <section className="section-pad">
           <div className="mx-auto w-full max-w-6xl">
