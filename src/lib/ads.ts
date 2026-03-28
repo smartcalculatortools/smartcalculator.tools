@@ -6,3 +6,12 @@ export const adSlots = {
 };
 
 export const adsEnabled = Boolean(adClient);
+
+export function getAdsTxtContent(client = adClient) {
+  if (!client.startsWith("ca-pub-")) {
+    return null;
+  }
+
+  const publisherId = client.replace(/^ca-/, "");
+  return `google.com, ${publisherId}, DIRECT, f08c47fec0942fa0\n`;
+}

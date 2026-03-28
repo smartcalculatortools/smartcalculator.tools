@@ -218,4 +218,12 @@ export function getCalculator(slug: string) {
   return calculators.find((calc) => calc.slug === slug) ?? null;
 }
 
+export function getCalculatorStaticParams() {
+  return calculators.map((calculator) => ({ slug: calculator.slug }));
+}
+
+export function getCategoryStaticParams() {
+  return categories.map((category) => ({ category: category.id }));
+}
+
 

@@ -51,6 +51,7 @@ Create `.env.local` and set the values you need:
 
 ```env
 NEXT_PUBLIC_SITE_URL=https://smartcalculatortools.net
+NEXT_PUBLIC_CONTACT_EMAIL=support@smartcalculatortools.net
 NEXT_PUBLIC_GA_ID=
 NEXT_PUBLIC_ADSENSE_CLIENT=
 NEXT_PUBLIC_ADSENSE_SLOT_HOME=
@@ -70,7 +71,13 @@ CLOUDFLARE_API_TOKEN=
 - SEO metadata, canonical URLs, sitemap, and robots are generated from `src/lib/site.ts`.
 - Google Analytics is optional and disabled when `NEXT_PUBLIC_GA_ID` is missing.
 - AdSense placements fail open and render placeholders when ad variables are missing.
-- Personalized recommendations use lightweight browser-local usage signals only.
+- Personalized recommendations use browser-local usage signals only after analytics consent is granted.
+- `/ads.txt` is generated from `NEXT_PUBLIC_ADSENSE_CLIENT` when configured.
+- For EEA/UK/Switzerland ad traffic, a Google-certified CMP is still required at the account level.
+
+## Publish
+
+Production publish checklist and monetization setup steps are documented in [`DEPLOYMENT.md`](./DEPLOYMENT.md).
 
 ## Main scripts
 

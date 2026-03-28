@@ -1,5 +1,6 @@
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import PrivacySettingsButton from "@/components/PrivacySettingsButton";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
@@ -45,6 +46,17 @@ export default function AboutPage() {
                 Some calculators are region-specific. For example, the income tax
                 calculator currently targets US-only assumptions.
               </p>
+            </div>
+            <div className="rounded-3xl border border-stroke bg-surface p-6 shadow-soft">
+              <h2 className="font-display text-2xl text-ink">Monetization policy</h2>
+              <p className="mt-2 text-sm text-muted">
+                Advertising is separated from calculator logic and clearly labeled when
+                it appears. Users can control analytics and advertising consent from the
+                privacy controls.
+              </p>
+              <div className="mt-4">
+                <PrivacySettingsButton className="rounded-full border border-stroke px-4 py-2 text-sm text-ink" />
+              </div>
             </div>
           </div>
         </div>

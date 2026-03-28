@@ -31,6 +31,13 @@ export default function TermsPage() {
               </p>
             </div>
             <div className="rounded-3xl border border-stroke bg-surface p-6 shadow-soft">
+              <h2 className="font-display text-2xl text-ink">Advertising</h2>
+              <p className="mt-2 text-sm text-muted">
+                Some pages may include clearly labeled advertising placements. Ads
+                never change calculator outputs or rankings.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-stroke bg-surface p-6 shadow-soft">
               <h2 className="font-display text-2xl text-ink">Embeds</h2>
               <p className="mt-2 text-sm text-muted">
                 Embedding calculators is allowed with attribution and without

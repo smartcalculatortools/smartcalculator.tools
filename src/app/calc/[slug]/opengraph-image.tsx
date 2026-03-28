@@ -1,10 +1,19 @@
 import { ImageResponse } from "next/og";
-import { getCalculator, categoryMap } from "@/lib/data/calculators";
+import {
+  getCalculator,
+  categoryMap,
+  getCalculatorStaticParams,
+} from "@/lib/data/calculators";
 import { calculatorContent } from "@/lib/data/calculatorContent";
 import { getSiteUrl, siteName } from "@/lib/site";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getCalculatorStaticParams();
+}
 
 const categoryColors: Record<string, { from: string; to: string }> = {
   financial: { from: "#d1fae5", to: "#f0fdf4" },

@@ -1,5 +1,5 @@
 import type { ConfigurableCalculatorDefinition } from "./base";
-import { clampNonNegative, safeDivide, shiftedValues, scaledValues } from "./base";
+import { clampNonNegative, safeDivide, shiftedValues } from "./base";
 
 export const otherBatch2Definitions: ConfigurableCalculatorDefinition[] = [
   {

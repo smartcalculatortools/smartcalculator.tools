@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import { categories } from "@/lib/data/calculators";
 
 export default function SiteHeader() {
@@ -32,6 +32,9 @@ export default function SiteHeader() {
           </Link>
           <Link href="/about" className="transition-colors hover:text-ink">
             About
+          </Link>
+          <Link href="/contact" className="transition-colors hover:text-ink">
+            Contact
           </Link>
         </nav>
         <div className="hidden items-center gap-3 md:flex">

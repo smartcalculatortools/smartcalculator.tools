@@ -1,6 +1,10 @@
 # local tooling outputs
 .tmp_pdf_render/
+.tmp_test_output.txt
 visual-audit/dom/
+visual-audit/screenshots/
+visual-audit/report.md
+visual-audit/report.json
 
 # dependencies
 node_modules/
@@ -14,6 +18,7 @@ node_modules/
 
 # testing
 coverage/
+test-results/
 
 # next.js
 .next/

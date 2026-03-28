@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CalculatorInteractive from "@/components/CalculatorInteractive";
-import { categoryMap, getCalculator } from "@/lib/data/calculators";
+import {
+  categoryMap,
+  getCalculator,
+  getCalculatorStaticParams,
+} from "@/lib/data/calculators";
 import { calculatorContent } from "@/lib/data/calculatorContent";
+import { getSiteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Embed",
@@ -11,6 +16,12 @@ export const metadata: Metadata = {
     follow: false,
   },
 };
+const siteUrl = getSiteUrl();
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getCalculatorStaticParams();
+}
 
 type EmbedPageProps = {
   params: Promise<{ slug: string }>;
@@ -36,7 +47,7 @@ export default async function EmbedPage({ params }: EmbedPageProps) {
       />
       <div className="mx-auto mt-4 w-full max-w-5xl pb-4 text-center">
         <a
-          href={`https://smartcalculatortools.net/calc/${calculator.slug}`}
+          href={`${siteUrl}/calc/${calculator.slug}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs text-muted transition-colors hover:text-ink hover:underline"

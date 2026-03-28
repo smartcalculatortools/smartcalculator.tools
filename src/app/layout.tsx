@@ -1,11 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Suspense } from "react";
 import { DM_Serif_Display, Space_Grotesk } from "next/font/google";
-import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import Analytics from "@/components/Analytics";
-import { AdProvider } from "@/components/Ads";
-import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
+import ConsentModeScript from "@/components/ConsentModeScript";
+import SiteServices from "@/components/SiteServices";
+import {
+  getSiteContactEmail,
+  getSiteUrl,
+  siteDescription,
+  siteLocale,
+  siteName,
+} from "@/lib/site";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -22,6 +25,28 @@ const dmSerif = DM_Serif_Display({
 });
 
 const siteUrl = getSiteUrl();
+const contactEmail = getSiteContactEmail();
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteName,
+  url: siteUrl,
+  description: siteDescription,
+  ...(contactEmail ? { email: contactEmail } : {}),
+};
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteName,
+  url: siteUrl,
+  inLanguage: "en",
+  description: siteDescription,
+  publisher: {
+    "@type": "Organization",
+    name: siteName,
+    url: siteUrl,
+  },
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -64,16 +89,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <ConsentModeScript />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+      </head>
       <body
         className={`${spaceGrotesk.variable} ${dmSerif.variable} antialiased`}
       >
         {children}
-        <Suspense fallback={null}>
-          <Analytics />
-          <VercelAnalytics />
-          <SpeedInsights />
-          <AdProvider />
-        </Suspense>
+        <SiteServices />
       </body>
     </html>
   );

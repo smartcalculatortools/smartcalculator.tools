@@ -3,7 +3,11 @@ import { notFound } from "next/navigation";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import CalculatorInteractive from "@/components/CalculatorInteractive";
-import { categoryMap, getCalculator } from "@/lib/data/calculators";
+import {
+  categoryMap,
+  getCalculator,
+  getCalculatorStaticParams,
+} from "@/lib/data/calculators";
 import { calculatorContent } from "@/lib/data/calculatorContent";
 import { buildFaqItems } from "@/lib/faq";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
@@ -13,6 +17,11 @@ type CalculatorPageProps = {
 };
 
 const siteUrl = getSiteUrl();
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getCalculatorStaticParams();
+}
 
 export async function generateMetadata(
   { params }: CalculatorPageProps
@@ -63,19 +72,24 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
   const category = categoryMap.get(calculator.category);
   const content = calculatorContent[calculator.slug];
   const faqItems = buildFaqItems({ calculator, category, content });
-  const jsonLd = {
+  const webPageJsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
+    "@type": "WebPage",
     name: calculator.name,
     description: content?.summary ?? calculator.blurb,
-    applicationCategory: "Calculator",
-    operatingSystem: "All",
-    isAccessibleForFree: true,
-    keywords: calculator.tags.join(", "),
     url: `${siteUrl}/calc/${calculator.slug}`,
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteName,
+      url: siteUrl,
+    },
+    about: {
+      "@type": "Thing",
+      name: calculator.name,
+    },
     publisher: {
       "@type": "Organization",
-      name: "Smart Calculator Tools",
+      name: siteName,
       url: siteUrl,
     },
   };
@@ -121,7 +135,7 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
       <SiteHeader />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
       />
       <script
         type="application/ld+json"

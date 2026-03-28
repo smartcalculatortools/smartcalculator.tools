@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import Script from "next/script";
 import { adClient } from "@/lib/ads";
+import { createDefaultConsentState } from "@/lib/consent";
+import {
+  readStoredConsentState,
+  subscribeToConsentState,
+} from "@/lib/consentStorage";
 
 type AdSlotProps = {
   slot?: string;
@@ -33,7 +38,12 @@ export function AdSlot({
   minHeight = 240,
   className = "",
 }: AdSlotProps) {
-  const isConfigured = Boolean(adClient && slot);
+  const consentState = useSyncExternalStore(
+    subscribeToConsentState,
+    readStoredConsentState,
+    createDefaultConsentState
+  );
+  const isConfigured = Boolean(adClient && slot && consentState.ads);
 
   useEffect(() => {
     if (!isConfigured) return;
@@ -55,7 +65,11 @@ export function AdSlot({
         <p className="text-[11px] uppercase tracking-[0.3em] text-muted">
           {label}
         </p>
-        <p className="mt-2 text-xs text-muted">Ad placement reserved.</p>
+        <p className="mt-2 text-xs text-muted">
+          {adClient && slot
+            ? "Ad placement reserved until advertising consent is granted."
+            : "Ad placement reserved."}
+        </p>
       </div>
     );
   }

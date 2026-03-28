@@ -1,4 +1,5 @@
 const defaultSiteUrl = "https://smartcalculatortools.net";
+const defaultContactEmail = "";
 
 export const siteName = "Smart Calculator Tools";
 export const siteDescription =
@@ -20,4 +21,12 @@ export function getSiteUrl(): string {
     defaultSiteUrl;
 
   return normalizeSiteUrl(envUrl);
+}
+
+export function getSiteContactEmail(): string {
+  return (
+    process.env.NEXT_PUBLIC_CONTACT_EMAIL ??
+    process.env.CONTACT_EMAIL ??
+    defaultContactEmail
+  ).trim();
 }

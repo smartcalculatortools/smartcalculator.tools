@@ -7,6 +7,7 @@ import SiteHeader from "@/components/SiteHeader";
 import {
   categories,
   getCalculatorsByCategory,
+  getCategoryStaticParams,
 } from "@/lib/data/calculators";
 import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
@@ -53,7 +54,7 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  return categories.map((category) => ({ category: category.id }));
+  return getCategoryStaticParams();
 }
 
 export default async function GuidePage({ params }: GuidePageProps) {

@@ -4,7 +4,11 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import CalculatorSearch from "@/components/CalculatorSearch";
 import UsageHighlights from "@/components/UsageHighlights";
-import { categories, getCalculatorsByCategory } from "@/lib/data/calculators";
+import {
+  categories,
+  getCalculatorsByCategory,
+  getCategoryStaticParams,
+} from "@/lib/data/calculators";
 import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 import Link from "next/link";
@@ -14,6 +18,11 @@ type CategoryPageProps = {
 };
 
 const siteUrl = getSiteUrl();
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getCategoryStaticParams();
+}
 
 export async function generateMetadata(
   { params }: CategoryPageProps

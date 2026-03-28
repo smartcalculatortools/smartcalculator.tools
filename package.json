@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "perf:local": "node scripts/perf-check.mjs"
+    "perf:local": "node scripts/perf-check.mjs",
+    "status:prod": "node scripts/production-status.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

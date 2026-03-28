@@ -3,6 +3,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { calculators } from "@/lib/data/calculators";
 import { buildMetadata } from "@/lib/seo";
+import { getSiteUrl } from "@/lib/site";
 
 export const metadata = buildMetadata({
   title: "Embed Widgets",
@@ -16,6 +17,7 @@ const embedList = [
   { slug: "bmi", height: 720 },
   { slug: "scientific", height: 640 },
 ];
+const siteUrl = getSiteUrl();
 
 export default function WidgetsPage() {
   return (
@@ -54,7 +56,7 @@ export default function WidgetsPage() {
                   </div>
                   <div className="mt-4 rounded-2xl border border-stroke/80 bg-white/70 p-4 text-xs text-muted">
                     <code>
-                      {`<iframe src="https://your-domain.com/embed/${calc.slug}" width="100%" height="${item.height}" style="border:0;" loading="lazy"></iframe>`}
+                      {`<iframe src="${siteUrl}/embed/${calc.slug}" width="100%" height="${item.height}" style="border:0;" loading="lazy"></iframe>`}
                     </code>
                   </div>
                 </div>

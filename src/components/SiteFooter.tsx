@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+import Link from "next/link";
+import PrivacySettingsButton from "@/components/PrivacySettingsButton";
 
 export default function SiteFooter() {
   return (
@@ -32,12 +33,22 @@ export default function SiteFooter() {
           <Link href="/learn" className="hover:text-ink">
             Learn
           </Link>
+          <Link href="/contact" className="hover:text-ink">
+            Contact
+          </Link>
+          <Link href="/cookies" className="hover:text-ink">
+            Cookies
+          </Link>
           <Link href="/privacy" className="hover:text-ink">
             Privacy
           </Link>
           <Link href="/terms" className="hover:text-ink">
             Terms
           </Link>
+          <PrivacySettingsButton
+            label="Privacy settings"
+            className="hover:text-ink"
+          />
         </div>
       </div>
     </footer>
