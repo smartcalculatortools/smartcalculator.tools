@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { DM_Serif_Display, Space_Grotesk } from "next/font/google";
 import ConsentModeScript from "@/components/ConsentModeScript";
 import SiteServices from "@/components/SiteServices";
+import { adClient } from "@/lib/ads";
 import {
   getSiteContactEmail,
   getSiteUrl,
@@ -91,6 +92,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <ConsentModeScript />
+        {adClient && (
+          <meta name="google-adsense-account" content={adClient} />
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
