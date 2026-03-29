@@ -3,13 +3,22 @@ import Link from "next/link";
 import CategoryCard from "@/components/CategoryCard";
 import CalculatorCard from "@/components/CalculatorCard";
 import CalculatorSearch from "@/components/CalculatorSearch";
+import LearnArticleCard from "@/components/LearnArticleCard";
 import { AdSlot } from "@/components/Ads";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import UsageHighlights from "@/components/UsageHighlights";
 import ScientificCalculator from "@/components/calculators/ScientificCalculator";
 import { adSlots } from "@/lib/ads";
-import { categories, calculators, getCalculatorsByCategory } from "@/lib/data/calculators";
+import {
+  categories,
+  calculators,
+  type Calculator,
+  getCalculator,
+  getCalculatorsByCategory,
+} from "@/lib/data/calculators";
+import { learnArticles } from "@/lib/data/learnArticles";
+import { calculatorSeoPriorities } from "@/lib/seoPriorities";
 import { getSiteUrl, siteDescription, siteLocale, siteName } from "@/lib/site";
 
 const siteUrl = getSiteUrl();
@@ -36,7 +45,11 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const featured = calculators.slice(0, 8);
+  const featured = calculatorSeoPriorities
+    .slice(0, 8)
+    .map((item) => getCalculator(item.slug))
+    .filter((calculator): calculator is Calculator => calculator !== null);
+  const featuredLearnArticles = learnArticles.slice(0, 4);
   const totalCalculators = calculators.length;
   const financialCount = getCalculatorsByCategory("financial").length;
   const fitnessCount = getCalculatorsByCategory("fitness").length;
@@ -198,6 +211,30 @@ export default function Home() {
             <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {featured.map((calc) => (
                 <CalculatorCard key={calc.slug} calculator={calc} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section-pad cv-auto-large pt-0">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-muted">Learn</p>
+                <h2 className="font-display text-3xl text-ink">
+                  High-intent guides for the questions people actually search
+                </h2>
+              </div>
+              <Link href="/learn" className="text-sm text-ink underline">
+                Browse all guides
+              </Link>
+            </div>
+            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {featuredLearnArticles.map((article) => (
+                <LearnArticleCard
+                  key={`${article.categoryId}-${article.slug}`}
+                  article={article}
+                />
               ))}
             </div>
           </div>

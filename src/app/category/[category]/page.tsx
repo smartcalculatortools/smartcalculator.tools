@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import CalculatorCard from "@/components/CalculatorCard";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import CalculatorSearch from "@/components/CalculatorSearch";
+import LearnArticleCard from "@/components/LearnArticleCard";
 import UsageHighlights from "@/components/UsageHighlights";
 import {
   categories,
   getCalculatorsByCategory,
   getCategoryStaticParams,
 } from "@/lib/data/calculators";
+import { getLearnArticlesByCategory } from "@/lib/data/learnArticles";
 import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 import Link from "next/link";
@@ -71,6 +74,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const calculators = getCalculatorsByCategory(category.id);
   const guide = getLearningGuide(category.id);
+  const categoryArticles = getLearnArticlesByCategory(category.id);
+  const starterCalculators = (guide?.starterSlugs ?? [])
+    .map((slug) => calculators.find((calculator) => calculator.slug === slug))
+    .filter(
+      (calculator): calculator is (typeof calculators)[number] => calculator !== undefined
+    );
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -134,6 +143,57 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </section>
         <UsageHighlights categoryId={category.id} />
+        {starterCalculators.length > 0 && (
+          <section className="section-pad pt-0">
+            <div className="mx-auto w-full max-w-6xl">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.4em] text-muted">
+                    Popular starting points
+                  </p>
+                  <h2 className="font-display text-3xl text-ink">
+                    Priority calculators in {category.name.toLowerCase()}
+                  </h2>
+                </div>
+                <Link href={`/learn/${category.id}`} className="text-sm text-ink underline">
+                  Read the full guide
+                </Link>
+              </div>
+              <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {starterCalculators.map((calculator) => (
+                  <CalculatorCard key={calculator.slug} calculator={calculator} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+        {categoryArticles.length > 0 && (
+          <section className="section-pad pt-0">
+            <div className="mx-auto w-full max-w-6xl">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.4em] text-muted">
+                    Learn articles
+                  </p>
+                  <h2 className="font-display text-3xl text-ink">
+                    Long-tail guides for {category.name.toLowerCase()} readers
+                  </h2>
+                </div>
+                <Link href="/learn" className="text-sm text-ink underline">
+                  Browse all learn content
+                </Link>
+              </div>
+              <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {categoryArticles.map((article) => (
+                  <LearnArticleCard
+                    key={`${article.categoryId}-${article.slug}`}
+                    article={article}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
         <section className="section-pad pt-0">
           <div className="mx-auto w-full max-w-6xl">
             <CalculatorSearch

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { calculators, categories } from "@/lib/data/calculators";
+import { learnArticles } from "@/lib/data/learnArticles";
 import { getSiteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -42,6 +43,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.6,
+    })),
+    ...learnArticles.map((article) => ({
+      url: `${siteUrl}/learn/${article.categoryId}/${article.slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.65,
     })),
     ...calculators.map((calculator) => ({
       url: `${siteUrl}/calc/${calculator.slug}`,

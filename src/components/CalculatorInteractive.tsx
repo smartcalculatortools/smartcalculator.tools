@@ -38,6 +38,7 @@ import type {
 import { getConfigurableCalculatorDefinition } from "@/lib/data/configurableCalculators/index";
 import { buildFaqItems } from "@/lib/faq";
 import type { CalculatorInsights } from "@/lib/insights";
+import { getLearnArticlesByCalculator } from "@/lib/data/learnArticles";
 import {
   getRelatedCalculators,
   getRelatedContextLabel,
@@ -259,6 +260,10 @@ export default function CalculatorInteractive({
   const faqItems = useMemo(
     () => buildFaqItems({ calculator, category, content }),
     [calculator, category, content]
+  );
+  const relatedLearnArticles = useMemo(
+    () => getLearnArticlesByCalculator(calculator.slug).slice(0, 2),
+    [calculator.slug]
   );
 
   return (
@@ -496,6 +501,42 @@ export default function CalculatorInteractive({
                   </ul>
                 </div>
               )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {!isEmbed && relatedLearnArticles.length > 0 && (
+        <section className="section-pad-compact pt-0 cv-auto">
+          <div className="mx-auto w-full max-w-5xl">
+            <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
+              <p className="text-xs uppercase tracking-[0.4em] text-muted">Learn more</p>
+              <h2 className="mt-2 font-display text-2xl text-ink">
+                Guides connected to the {calculator.name.toLowerCase()}
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm text-muted">
+                Use these short guides when you want the decision framework behind the numbers, not just the raw output.
+              </p>
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                {relatedLearnArticles.map((article) => (
+                  <Link
+                    key={`${article.categoryId}-${article.slug}`}
+                    href={`/learn/${article.categoryId}/${article.slug}`}
+                    className="rounded-2xl border border-stroke/80 bg-white/70 px-4 py-4 transition hover:-translate-y-0.5"
+                  >
+                    <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                      {article.targetQuery}
+                    </p>
+                    <h3 className="mt-2 text-lg font-semibold text-ink">
+                      {article.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-muted">{article.summary}</p>
+                    <p className="mt-4 text-sm font-semibold text-ink underline">
+                      Read the guide
+                    </p>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </section>

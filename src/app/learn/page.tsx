@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LearnArticleCard from "@/components/LearnArticleCard";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { categories, getCalculatorsByCategory } from "@/lib/data/calculators";
+import { learnArticles } from "@/lib/data/learnArticles";
 import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
@@ -87,6 +89,29 @@ export default function LearnIndexPage() {
                   </article>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        <section className="section-pad pt-0">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-muted">
+                  Long-tail guides
+                </p>
+                <h2 className="font-display text-3xl text-ink">
+                  Learn by the exact question you are trying to answer
+                </h2>
+              </div>
+              <Link href="/learn/financial" className="text-sm text-ink underline">
+                Open category guides
+              </Link>
+            </div>
+            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {learnArticles.map((article) => (
+                <LearnArticleCard key={`${article.categoryId}-${article.slug}`} article={article} />
+              ))}
             </div>
           </div>
         </section>
