@@ -10,6 +10,7 @@ import {
 } from "@/lib/data/calculators";
 import { calculatorContent } from "@/lib/data/calculatorContent";
 import { buildFaqItems } from "@/lib/faq";
+import { getCalculatorSeoPriority } from "@/lib/seoPriorities";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
 type CalculatorPageProps = {
@@ -35,9 +36,11 @@ export async function generateMetadata(
   }
 
   const content = calculatorContent[calculator.slug];
-  const pageTitle = calculator.name;
+  const seoPriority = getCalculatorSeoPriority(calculator.slug);
+  const pageTitle = seoPriority?.title ?? calculator.name;
   const fullTitle = `${pageTitle} | ${siteName}`;
-  const description = content?.summary ?? calculator.blurb;
+  const description =
+    seoPriority?.description ?? content?.summary ?? calculator.blurb;
   const url = `${siteUrl}/calc/${calculator.slug}`;
 
   return {
@@ -71,12 +74,14 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
 
   const category = categoryMap.get(calculator.category);
   const content = calculatorContent[calculator.slug];
+  const seoPriority = getCalculatorSeoPriority(calculator.slug);
   const faqItems = buildFaqItems({ calculator, category, content });
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: calculator.name,
-    description: content?.summary ?? calculator.blurb,
+    description:
+      seoPriority?.description ?? content?.summary ?? calculator.blurb,
     url: `${siteUrl}/calc/${calculator.slug}`,
     isPartOf: {
       "@type": "WebSite",
@@ -124,7 +129,7 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
       {
         "@type": "ListItem",
         position: 3,
-        name: calculator.name,
+        name: seoPriority?.title ?? calculator.name,
         item: `${siteUrl}/calc/${calculator.slug}`,
       },
     ],
