@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 
 import { formatNumber } from "@/lib/calculators/format";
 import {
   appendScientificHistory,
+  buildScientificHistoryFilename,
+  formatScientificHistoryForExport,
   type ScientificHistoryEntry,
 } from "@/lib/calculators/scientificHistory";
 import {
@@ -109,6 +111,7 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
   const [angleMode, setAngleMode] = useState<AngleMode>("rad");
   const [memory, setMemory] = useState(0);
   const [ans, setAns] = useState(0);
+  const [historyFeedback, setHistoryFeedback] = useState<string | null>(null);
   const history = useSyncExternalStore(
     subscribeToScientificHistory,
     readStoredScientificHistorySnapshot,
@@ -118,6 +121,10 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
   const result = useMemo(
     () => evaluateExpression(expression, { angleMode, ans }),
     [expression, angleMode, ans]
+  );
+  const historyExportText = useMemo(
+    () => formatScientificHistoryForExport(history),
+    [history]
   );
 
   const insights = useMemo<CalculatorInsights>(() => {
@@ -160,6 +167,18 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
   useEffect(() => {
     onInsightsChange?.(insights);
   }, [insights, onInsightsChange]);
+
+  useEffect(() => {
+    if (!historyFeedback) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setHistoryFeedback(null);
+    }, 2200);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [historyFeedback]);
 
   const commitHistory = useCallback((nextEntries: ScientificHistoryEntry[]) => {
     writeStoredScientificHistory(nextEntries);
@@ -296,6 +315,49 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
     appendValue(key.value);
   };
 
+  const handleCopyHistory = useCallback(async () => {
+    if (history.length === 0) {
+      return;
+    }
+
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(historyExportText);
+      } else if (typeof document !== "undefined") {
+        const textarea = document.createElement("textarea");
+        textarea.value = historyExportText;
+        textarea.setAttribute("readonly", "true");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
+      setHistoryFeedback("History copied");
+    } catch {
+      setHistoryFeedback("Copy failed");
+    }
+  }, [history, historyExportText]);
+
+  const handleExportHistory = useCallback(() => {
+    if (history.length === 0 || typeof document === "undefined") {
+      return;
+    }
+
+    const blob = new Blob([historyExportText], { type: "text/plain;charset=utf-8" });
+    const objectUrl = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = objectUrl;
+    anchor.download = buildScientificHistoryFilename();
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(objectUrl);
+    setHistoryFeedback("History exported");
+  }, [history, historyExportText]);
+
   return (
     <div className="grid gap-4">
       <div className="grid gap-3 xl:grid-cols-[1.45fr_0.85fr]">
@@ -330,13 +392,32 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
                 Your latest completed calculations.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={clearStoredScientificHistory}
-              className="rounded-full border border-stroke px-3 py-1 text-xs font-semibold text-ink transition hover:border-ink"
-            >
-              Clear
-            </button>
+            <div className="flex flex-wrap justify-end gap-2">
+              <button
+                type="button"
+                onClick={handleCopyHistory}
+                disabled={history.length === 0}
+                className="rounded-full border border-stroke px-3 py-1 text-xs font-semibold text-ink transition hover:border-ink disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Copy
+              </button>
+              <button
+                type="button"
+                onClick={handleExportHistory}
+                disabled={history.length === 0}
+                className="rounded-full border border-stroke px-3 py-1 text-xs font-semibold text-ink transition hover:border-ink disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Export
+              </button>
+              <button
+                type="button"
+                onClick={clearStoredScientificHistory}
+                disabled={history.length === 0}
+                className="rounded-full border border-stroke px-3 py-1 text-xs font-semibold text-ink transition hover:border-ink disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Clear
+              </button>
+            </div>
           </div>
 
           <div className="mt-4 max-h-48 space-y-2 overflow-y-auto pr-1">
@@ -364,6 +445,36 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
                 </button>
               ))
             )}
+          </div>
+
+          <div className="mt-4 rounded-2xl border border-stroke/80 bg-surface px-4 py-3">
+            <div className="text-xs uppercase tracking-[0.3em] text-muted">
+              Keyboard shortcuts
+            </div>
+            <div className="mt-3 grid gap-2 text-sm text-muted">
+              <p>
+                <span className="font-semibold text-ink">Enter</span> runs the current
+                expression.
+              </p>
+              <p>
+                <span className="font-semibold text-ink">Backspace</span> deletes the
+                last character.
+              </p>
+              <p>
+                <span className="font-semibold text-ink">Esc</span> clears the display.
+              </p>
+            </div>
+            <p className="mt-3 text-xs text-muted">
+              Digits, operators, and letters like <span className="font-semibold text-ink">sin</span>,
+              <span className="font-semibold text-ink"> cos</span>, and
+              <span className="font-semibold text-ink"> log</span> also work directly
+              from the keyboard.
+            </p>
+            {historyFeedback ? (
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                {historyFeedback}
+              </p>
+            ) : null}
           </div>
         </div>
       </div>

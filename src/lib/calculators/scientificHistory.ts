@@ -87,3 +87,23 @@ export function appendScientificHistory(
     ...entries,
   ].slice(0, maxScientificHistoryEntries);
 }
+
+export function formatScientificHistoryForExport(
+  entries: ScientificHistoryEntry[]
+) {
+  if (entries.length === 0) {
+    return "No completed operations yet.";
+  }
+
+  return entries
+    .map(
+      (entry, index) =>
+        `${index + 1}. ${entry.expression} = ${entry.result} [${entry.recordedAt}]`
+    )
+    .join("\n");
+}
+
+export function buildScientificHistoryFilename(date = new Date()) {
+  const isoDate = date.toISOString().slice(0, 10);
+  return `scientific-history-${isoDate}.txt`;
+}

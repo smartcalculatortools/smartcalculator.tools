@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   appendScientificHistory,
+  buildScientificHistoryFilename,
+  formatScientificHistoryForExport,
   maxScientificHistoryEntries,
   parseStoredScientificHistory,
 } from "./scientificHistory";
@@ -46,5 +48,24 @@ describe("scientific history", () => {
 
     expect(entries).toHaveLength(1);
     expect(entries[0]).toMatchObject({ expression: "2+2", result: 4 });
+  });
+
+  it("formats history for copy and export", () => {
+    const text = formatScientificHistoryForExport([
+      {
+        expression: "2+2",
+        result: 4,
+        recordedAt: "2026-03-29T00:00:00.000Z",
+      },
+    ]);
+
+    expect(text).toContain("1. 2+2 = 4");
+    expect(text).toContain("[2026-03-29T00:00:00.000Z]");
+  });
+
+  it("builds a stable export filename", () => {
+    expect(buildScientificHistoryFilename(new Date("2026-03-29T10:00:00.000Z"))).toBe(
+      "scientific-history-2026-03-29.txt"
+    );
   });
 });
