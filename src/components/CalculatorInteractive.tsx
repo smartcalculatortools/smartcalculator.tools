@@ -7,7 +7,6 @@ import { AdSlot } from "@/components/Ads";
 import CalculatorCard from "@/components/CalculatorCard";
 import CalculatorUsageTracker from "@/components/CalculatorUsageTracker";
 import { adSlots } from "@/lib/ads";
-import { calculators } from "@/lib/data/calculators";
 import type { Calculator, Category } from "@/lib/data/calculators";
 import MortgageCalculator from "@/components/calculators/MortgageCalculator";
 import LoanCalculator from "@/components/calculators/LoanCalculator";
@@ -39,6 +38,10 @@ import type {
 import { getConfigurableCalculatorDefinition } from "@/lib/data/configurableCalculators/index";
 import { buildFaqItems } from "@/lib/faq";
 import type { CalculatorInsights } from "@/lib/insights";
+import {
+  getRelatedCalculators,
+  getRelatedContextLabel,
+} from "@/lib/relatedCalculators";
 
 type CalculatorInteractiveProps = {
   calculator: Calculator;
@@ -244,17 +247,14 @@ export default function CalculatorInteractive({
     return sections.filter((section) => section !== null);
   }, [chart, content, table]);
 
-  const relatedCalculators = useMemo(() => {
-    const sameCategory = calculators.filter(
-      (item) =>
-        item.category === calculator.category && item.slug !== calculator.slug
-    );
-    const otherCategory = calculators.filter(
-      (item) =>
-        item.category !== calculator.category && item.slug !== calculator.slug
-    );
-    return [...sameCategory, ...otherCategory].slice(0, 4);
-  }, [calculator.category, calculator.slug]);
+  const relatedCalculators = useMemo(
+    () => getRelatedCalculators(calculator, 4),
+    [calculator]
+  );
+  const relatedContextLabel = useMemo(
+    () => getRelatedContextLabel(calculator),
+    [calculator]
+  );
 
   const faqItems = useMemo(
     () => buildFaqItems({ calculator, category, content }),
@@ -359,7 +359,7 @@ export default function CalculatorInteractive({
           <div className="mx-auto w-full max-w-5xl">
             <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
               <h2 className="font-display text-2xl text-ink">
-                How this calculator works
+                How this {calculator.name} works
               </h2>
               <p className="mt-3 text-sm text-muted">{content.summary}</p>
               {contentSections.length > 0 && (
@@ -370,7 +370,7 @@ export default function CalculatorInteractive({
                         Quick guide
                       </p>
                       <p className="mt-2 text-sm text-muted">
-                        Jump straight to the section you need, then return to the calculator.
+                        Jump to the section you need, then return to the {calculator.name.toLowerCase()}.
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -426,9 +426,11 @@ export default function CalculatorInteractive({
                 <div id="calculator-formulas" className="mt-5">
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <h3 className="font-display text-2xl text-ink">Formula guide</h3>
+                      <h3 className="font-display text-2xl text-ink">
+                        {calculator.name} formula guide
+                      </h3>
                       <p className="mt-2 text-sm text-muted">
-                        Use these formulas to audit the output or explain it to someone else.
+                        Use these {calculator.name.toLowerCase()} formulas to audit the output or explain it to someone else.
                       </p>
                     </div>
                     <p className="text-xs uppercase tracking-[0.3em] text-muted">
@@ -450,10 +452,10 @@ export default function CalculatorInteractive({
               {content.examples && content.examples.length > 0 && (
                 <div id="calculator-examples" className="mt-5">
                   <h3 className="font-display text-2xl text-ink">
-                    Usage examples
+                    {calculator.name} examples
                   </h3>
                   <p className="mt-2 text-sm text-muted">
-                    Review a ready-made scenario, copy it, then tweak inputs to match your case.
+                    Review a ready-made {calculator.name.toLowerCase()} scenario, copy it, then tweak inputs to match your case.
                   </p>
                   <div className="mt-3 grid gap-3 md:grid-cols-2">
                     {content.examples.map((example) => (
@@ -505,7 +507,7 @@ export default function CalculatorInteractive({
           <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
             <p className="text-xs uppercase tracking-[0.4em] text-muted">FAQ</p>
             <h2 className="mt-2 font-display text-2xl text-ink">
-              Common questions
+              {calculator.name} FAQ
             </h2>
             <div className="mt-4 grid gap-3">
               {faqItems.map((item) => (
@@ -534,8 +536,11 @@ export default function CalculatorInteractive({
                   Related
                 </p>
                 <h3 className="font-display text-2xl text-ink">
-                  More calculators in your flow
+                  Related calculators for {relatedContextLabel}
                 </h3>
+                <p className="mt-2 max-w-2xl text-sm text-muted">
+                  These links answer the next question people usually ask after using the {calculator.name.toLowerCase()}.
+                </p>
               </div>
               <Link
                 href={`/category/${calculator.category}`}
