@@ -26,6 +26,14 @@ describe("getSiteUrl", () => {
     expect(getSiteUrl()).toBe("https://example.com");
   });
 
+  it("trims whitespace from the site URL env var", () => {
+    process.env.NEXT_PUBLIC_SITE_URL = " https://example.com/\r\n";
+    process.env.SITE_URL = "";
+    process.env.VERCEL_PROJECT_PRODUCTION_URL = "";
+
+    expect(getSiteUrl()).toBe("https://example.com");
+  });
+
   it("falls back to the production domain when no env is set", () => {
     delete process.env.NEXT_PUBLIC_SITE_URL;
     delete process.env.SITE_URL;
@@ -36,6 +44,13 @@ describe("getSiteUrl", () => {
 
   it("reads the contact email from the public env var", () => {
     process.env.NEXT_PUBLIC_CONTACT_EMAIL = "support@example.com";
+    process.env.CONTACT_EMAIL = "";
+
+    expect(getSiteContactEmail()).toBe("support@example.com");
+  });
+
+  it("trims whitespace from the contact email env var", () => {
+    process.env.NEXT_PUBLIC_CONTACT_EMAIL = " support@example.com\r\n";
     process.env.CONTACT_EMAIL = "";
 
     expect(getSiteContactEmail()).toBe("support@example.com");

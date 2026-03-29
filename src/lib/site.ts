@@ -7,9 +7,10 @@ export const siteDescription =
 export const siteLocale = "en_US";
 
 function normalizeSiteUrl(rawUrl: string): string {
-  const withProtocol = rawUrl.startsWith("http")
-    ? rawUrl
-    : `https://${rawUrl}`;
+  const sanitizedUrl = rawUrl.trim();
+  const withProtocol = sanitizedUrl.startsWith("http")
+    ? sanitizedUrl
+    : `https://${sanitizedUrl}`;
   return withProtocol.replace(/\/$/, "");
 }
 

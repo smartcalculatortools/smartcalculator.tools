@@ -4,7 +4,7 @@ import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-const gaId = process.env.NEXT_PUBLIC_GA_ID;
+const gaId = (process.env.NEXT_PUBLIC_GA_ID ?? "").trim();
 
 function buildPagePath(pathname: string, search: string | null) {
   if (!search) return pathname;
