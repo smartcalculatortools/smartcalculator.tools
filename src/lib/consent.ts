@@ -48,6 +48,18 @@ export function normalizeConsentState(value: unknown): ConsentState {
   };
 }
 
+export function parseStoredConsentState(rawValue: string | null): ConsentState {
+  if (!rawValue) {
+    return createDefaultConsentState();
+  }
+
+  try {
+    return normalizeConsentState(JSON.parse(rawValue));
+  } catch {
+    return createDefaultConsentState();
+  }
+}
+
 export function createAcceptedConsentState(): ConsentState {
   return {
     hasInteracted: true,

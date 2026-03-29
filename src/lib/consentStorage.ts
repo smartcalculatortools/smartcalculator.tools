@@ -4,6 +4,7 @@ import {
   consentStorageKey,
   createDefaultConsentState,
   normalizeConsentState,
+  parseStoredConsentState,
   type ConsentState,
 } from "@/lib/consent";
 
@@ -48,7 +49,7 @@ export function readStoredConsentState() {
       return cachedSnapshot;
     }
 
-    cachedSnapshot = normalizeConsentState(JSON.parse(rawValue));
+    cachedSnapshot = parseStoredConsentState(rawValue);
     cachedRawValue = rawValue;
     return cachedSnapshot;
   } catch {

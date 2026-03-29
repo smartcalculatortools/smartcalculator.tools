@@ -22,8 +22,22 @@ declare global {
   }
 }
 
+function syncConsentMarker(hasInteracted: boolean) {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  if (hasInteracted) {
+    document.documentElement.setAttribute("data-consent-interacted", "true");
+    return;
+  }
+
+  document.documentElement.removeAttribute("data-consent-interacted");
+}
+
 function applyConsent(nextState: ConsentState) {
   writeStoredConsentState(nextState);
+  syncConsentMarker(nextState.hasInteracted);
   window.gtag?.("consent", "update", buildGtagConsentState(nextState));
 }
 
@@ -58,6 +72,10 @@ export default function ConsentBanner() {
     };
   }, [consentState]);
 
+  useEffect(() => {
+    syncConsentMarker(consentState.hasInteracted);
+  }, [consentState.hasInteracted]);
+
   const isVisible = !consentState.hasInteracted || isOpen;
 
   if (!isVisible) {
@@ -65,20 +83,28 @@ export default function ConsentBanner() {
   }
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4 sm:px-6">
-      <div className="mx-auto w-full max-w-5xl rounded-[28px] border border-stroke bg-surface p-5 shadow-soft">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-3xl">
+    <div
+      data-consent-banner
+      data-consent-open={isOpen ? "true" : undefined}
+      className="fixed inset-x-0 bottom-0 z-50 px-3 pb-3 sm:px-4 sm:pb-4"
+    >
+      <div className="mx-auto flex w-full max-w-6xl justify-end">
+        <div
+          className={`pointer-events-auto w-full rounded-[24px] border border-stroke bg-surface p-4 shadow-soft sm:p-5 ${
+            showPreferences ? "max-w-3xl" : "max-w-xl"
+          }`}
+        >
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+          <div className="max-w-2xl">
             <p className="text-xs uppercase tracking-[0.35em] text-muted">
               Privacy choices
             </p>
-            <h2 className="mt-2 font-display text-2xl text-ink">
+            <h2 className="mt-2 font-display text-xl text-ink sm:text-2xl">
               Choose how this site uses analytics and advertising
             </h2>
             <p className="mt-3 text-sm text-muted">
-              Essential storage keeps the site stable. Optional analytics help us
-              measure performance, and optional advertising can support the site. You
-              can change this any time from the footer or policy pages.
+              Essential storage keeps the site usable. Optional analytics help us
+              improve performance, and optional advertising can support the site.
             </p>
             <p className="mt-3 text-xs text-muted">
               Read more in our{" "}
@@ -92,7 +118,7 @@ export default function ConsentBanner() {
               .
             </p>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex shrink-0 flex-wrap gap-2 xl:max-w-[13rem] xl:justify-end">
             <button
               type="button"
               onClick={() => {
@@ -208,6 +234,7 @@ export default function ConsentBanner() {
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

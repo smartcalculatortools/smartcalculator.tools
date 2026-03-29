@@ -5,6 +5,7 @@ import {
   createAcceptedConsentState,
   createDefaultConsentState,
   normalizeConsentState,
+  parseStoredConsentState,
 } from "@/lib/consent";
 import {
   readStoredConsentState,
@@ -53,6 +54,28 @@ describe("consent helpers", () => {
 
   it("normalizes invalid values safely", () => {
     expect(normalizeConsentState({ analytics: 1, ads: "yes" })).toEqual({
+      hasInteracted: false,
+      analytics: false,
+      ads: false,
+      updatedAt: null,
+    });
+  });
+
+  it("parses stored consent safely from raw JSON", () => {
+    expect(
+      parseStoredConsentState(
+        '{"hasInteracted":true,"analytics":true,"ads":false,"updatedAt":"2026-03-29T00:00:00.000Z"}'
+      )
+    ).toEqual({
+      hasInteracted: true,
+      analytics: true,
+      ads: false,
+      updatedAt: "2026-03-29T00:00:00.000Z",
+    });
+  });
+
+  it("falls back when stored consent JSON is invalid", () => {
+    expect(parseStoredConsentState("{not-json")).toEqual({
       hasInteracted: false,
       analytics: false,
       ads: false,

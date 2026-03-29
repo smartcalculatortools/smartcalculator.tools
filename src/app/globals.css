@@ -47,6 +47,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html[data-consent-interacted="true"]
+  [data-consent-banner]:not([data-consent-open="true"]) {
+  display: none !important;
+}
+
 ::selection {
   background: #0b7a6a;
   color: #fff7e9;
