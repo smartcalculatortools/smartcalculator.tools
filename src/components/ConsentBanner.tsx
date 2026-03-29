@@ -73,12 +73,12 @@ export default function ConsentBanner() {
               Privacy choices
             </p>
             <h2 className="mt-2 font-display text-2xl text-ink">
-              Choose how this site uses analytics and ads
+              Choose how this site uses analytics and advertising
             </h2>
             <p className="mt-3 text-sm text-muted">
               Essential storage keeps the site stable. Optional analytics help us
-              measure performance, and optional ads enable AdSense placements. You can
-              change this any time from the footer or policy pages.
+              measure performance, and optional advertising can support the site. You
+              can change this any time from the footer or policy pages.
             </p>
             <p className="mt-3 text-xs text-muted">
               Read more in our{" "}
@@ -163,8 +163,8 @@ export default function ConsentBanner() {
                 <div>
                   <p className="text-sm font-semibold text-ink">Advertising</p>
                   <p className="mt-2 text-xs text-muted">
-                    Allows Google AdSense to load ad placements. Ads may use cookies or
-                    local storage where permitted by law and your choices.
+                    Allows advertising features to load. Advertising may use cookies
+                    or local storage where permitted by law and your choices.
                   </p>
                 </div>
                 <input
