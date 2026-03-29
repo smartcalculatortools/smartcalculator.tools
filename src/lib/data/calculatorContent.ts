@@ -30,10 +30,12 @@ export type InsightChart = {
 
 export type CalculatorContent = {
   summary: string;
+  whenToUse?: string[];
   inputs?: string[];
   outputs?: string[];
   formulas?: string[];
   assumptions?: string[];
+  commonMistakes?: string[];
   tips?: string[];
   references?: string[];
   disclaimer?: string;
@@ -1775,7 +1777,141 @@ bmi: {
   },
 };
 
+const priorityContentEnhancements: Record<
+  string,
+  Pick<CalculatorContent, "whenToUse" | "commonMistakes">
+> = {
+  mortgage: {
+    whenToUse: [
+      "Compare home prices, down payments, and mortgage rates before speaking with a lender.",
+      "Estimate the real monthly housing cost after taxes, insurance, HOA, and PMI.",
+      "Test how extra principal payments change payoff timing and total interest over the loan.",
+    ],
+    commonMistakes: [
+      "Using principal and interest only while forgetting escrow, HOA dues, or mortgage insurance.",
+      "Comparing two offers by monthly payment alone instead of checking total interest over the full term.",
+      "Leaving property tax or homeowners insurance at zero even though the lender will likely collect them monthly.",
+    ],
+  },
+  loan: {
+    whenToUse: [
+      "Check monthly payments before taking an auto, personal, or small business loan.",
+      "Compare shorter and longer repayment terms to balance cash flow against total interest paid.",
+      "Estimate payoff timing from a planned start date before signing a lender offer.",
+    ],
+    commonMistakes: [
+      "Ignoring lender fees and focusing only on the APR and payment shown by the calculator.",
+      "Comparing loans with different payment frequencies without matching the same compounding assumptions.",
+      "Choosing the lowest payment without noticing how much extra interest the longer term adds.",
+    ],
+  },
+  "compound-interest": {
+    whenToUse: [
+      "Project long-term portfolio growth for retirement, college savings, or general investing plans.",
+      "Compare how different monthly contributions change the ending balance over the same horizon.",
+      "Stress-test growth expectations with conservative versus aggressive return assumptions.",
+    ],
+    commonMistakes: [
+      "Assuming the projected return is guaranteed even though real investment returns vary over time.",
+      "Using an annual rate that already includes fees, then forgetting to model taxes or inflation separately.",
+      "Comparing scenarios with different contribution timing without noticing the start-versus-end effect.",
+    ],
+  },
+  savings: {
+    whenToUse: [
+      "Plan cash goals such as an emergency fund, vacation, car purchase, or house down payment.",
+      "Estimate how recurring deposits and a starting balance combine to reach a target amount.",
+      "See how taxes or inflation can reduce the practical value of a future savings balance.",
+    ],
+    commonMistakes: [
+      "Treating a short-term cash goal like an investment projection and using an unrealistic interest rate.",
+      "Forgetting to increase deposits when income rises, even though that usually drives results more than rate changes.",
+      "Looking only at nominal future value without checking after-tax or inflation-adjusted purchasing power.",
+    ],
+  },
+  "income-tax": {
+    whenToUse: [
+      "Estimate federal tax and take-home pay before accepting a new salary or bonus structure.",
+      "Compare filing statuses, deduction choices, and credits for year-end planning scenarios.",
+      "Translate annual tax estimates into per-paycheck numbers for budgeting and withholding checks.",
+    ],
+    commonMistakes: [
+      "Assuming the result includes state or payroll taxes when this estimate is focused on federal income tax.",
+      "Using the wrong tax year or filing status, which can materially change deductions and bracket thresholds.",
+      "Confusing marginal tax rate with effective tax rate when evaluating raises, bonuses, or side income.",
+    ],
+  },
+  bmi: {
+    whenToUse: [
+      "Get a fast adult screening metric from height and weight before looking at deeper body-composition tools.",
+      "Track broad weight-status trends over time with one simple, standardized measurement.",
+      "Check whether current weight falls inside a common healthy-weight range for a given height.",
+    ],
+    commonMistakes: [
+      "Treating BMI like a diagnosis even though it is only a screening tool and not a direct fat measurement.",
+      "Applying adult BMI categories to children or teens, who require age- and sex-specific growth charts.",
+      "Overreacting to a single result instead of looking at trend, waist size, and other health context.",
+    ],
+  },
+  calorie: {
+    whenToUse: [
+      "Estimate maintenance calories before setting a weight-loss, gain, or recomposition target.",
+      "Compare activity multipliers and goal adjustments for a realistic daily calorie starting point.",
+      "Recalculate nutrition targets after a noticeable change in body weight, training load, or routine.",
+    ],
+    commonMistakes: [
+      "Choosing an activity level that reflects ideal training volume instead of current weekly behavior.",
+      "Using a very large deficit or surplus immediately, then blaming the calculator when adherence drops.",
+      "Treating the output as exact when real maintenance calories often need several weeks of adjustment.",
+    ],
+  },
+  bmr: {
+    whenToUse: [
+      "Estimate resting calorie needs before calculating maintenance or cutting and bulking targets.",
+      "Compare common BMR equations when you want a better baseline for nutrition planning.",
+      "Build a simple calorie model that starts from body size and age rather than guesswork.",
+    ],
+    commonMistakes: [
+      "Using BMR as if it were daily maintenance even though normal movement requires an activity multiplier.",
+      "Entering outdated body weight after a meaningful cut or bulk, which makes the baseline stale.",
+      "Expecting one formula to be universally correct when body composition can shift which estimate is best.",
+    ],
+  },
+  "body-fat": {
+    whenToUse: [
+      "Estimate body fat percentage from tape measurements when you do not have access to a scan device.",
+      "Track changes in body composition over time using the same measurement method and timing.",
+      "Compare Navy and BMI-based estimates to spot whether a reading is directionally reasonable.",
+    ],
+    commonMistakes: [
+      "Changing where the tape is placed from one check to the next, which makes trend tracking unreliable.",
+      "Pulling the tape too tight or measuring after meals, training, or heavy water fluctuation.",
+      "Comparing results from different methods as if they should match exactly instead of treating them as estimates.",
+    ],
+  },
+  scientific: {
+    whenToUse: [
+      "Handle quick trig, logarithm, exponent, fraction, or factorial calculations without opening a desktop app.",
+      "Run chained calculations in the browser while keeping memory values and the last answer available.",
+      "Check homework, engineering, finance, or programming math that needs more than a basic calculator.",
+    ],
+    commonMistakes: [
+      "Using DEG mode for radians input, or RAD mode for degree input, before trig calculations.",
+      "Skipping parentheses and assuming the calculator will follow a custom order instead of standard precedence.",
+      "Expecting perfect symbolic precision even though the calculator uses floating-point arithmetic in the browser.",
+    ],
+  },
+};
+
 export const calculatorContent: Record<string, CalculatorContent> = {
-  ...staticCalculatorContent,
+  ...Object.fromEntries(
+    Object.entries(staticCalculatorContent).map(([slug, content]) => [
+      slug,
+      {
+        ...content,
+        ...(priorityContentEnhancements[slug] ?? {}),
+      },
+    ])
+  ),
   ...generatedCalculatorContent,
 };

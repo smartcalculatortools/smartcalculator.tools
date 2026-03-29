@@ -21,12 +21,20 @@ export function buildFaqItems({
   const categoryLabel = category?.name ?? "this category";
   const inputList = content?.inputs?.slice(0, 3) ?? [];
   const outputList = content?.outputs?.slice(0, 3) ?? [];
+  const useCases = content?.whenToUse?.slice(0, 2) ?? [];
+  const commonMistakes = content?.commonMistakes?.slice(0, 2) ?? [];
   const inputHint = inputList.length
     ? `Typical inputs include ${inputList.join(", ")}.`
     : "Enter the values requested in the form, then adjust them to your case.";
   const outputHint = outputList.length
     ? `You will see outputs like ${outputList.join(", ")}.`
     : "Results update instantly as you change inputs.";
+  const useCaseHint = useCases.length
+    ? `Use it when you need to ${useCases.join(" ")}`
+    : null;
+  const mistakeHint = commonMistakes.length
+    ? `Common mistakes include ${commonMistakes.join(" ")}`
+    : null;
   const methodology = content
     ? 'We follow the formulas and assumptions outlined in the "How this calculator works" section.'
     : "We follow standard formulas for this type of calculator.";
@@ -36,6 +44,12 @@ export function buildFaqItems({
       question: `What does the ${calculator.name} do?`,
       answer: `${summary} It is part of our ${categoryLabel.toLowerCase()} toolkit.`,
     },
+    useCaseHint
+      ? {
+          question: "When should I use this calculator?",
+          answer: useCaseHint,
+        }
+      : null,
     {
       question: "What inputs do I need?",
       answer: inputHint,
@@ -44,6 +58,12 @@ export function buildFaqItems({
       question: "How are the results calculated?",
       answer: `${methodology} ${outputHint}`,
     },
+    mistakeHint
+      ? {
+          question: "What mistakes should I avoid?",
+          answer: mistakeHint,
+        }
+      : null,
     {
       question: "Can I share or download the results?",
       answer:
@@ -54,5 +74,5 @@ export function buildFaqItems({
       answer:
         "No. Calculations run in your browser and we do not store your inputs.",
     },
-  ];
+  ].filter((item): item is FaqItem => item !== null);
 }

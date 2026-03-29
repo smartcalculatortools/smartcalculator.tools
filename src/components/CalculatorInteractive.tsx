@@ -220,10 +220,16 @@ export default function CalculatorInteractive({
     if (!content) return [];
 
     const sections = [
+      content.whenToUse?.length
+        ? { id: "when-to-use", label: "Best use cases" }
+        : null,
       content.inputs?.length ? { id: "inputs", label: "Inputs" } : null,
       content.outputs?.length ? { id: "outputs", label: "Outputs" } : null,
       content.assumptions?.length
         ? { id: "assumptions", label: "Assumptions" }
+        : null,
+      content.commonMistakes?.length
+        ? { id: "common-mistakes", label: "Common mistakes" }
         : null,
       content.tips?.length ? { id: "tips", label: "Tips" } : null,
       content.formulas?.length ? { id: "formulas", label: "Formulas" } : null,
@@ -381,7 +387,12 @@ export default function CalculatorInteractive({
                   </div>
                 </div>
               )}
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
+              <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {content.whenToUse && (
+                  <div id="calculator-when-to-use">
+                    <ContentCard title="Best use cases" items={content.whenToUse} />
+                  </div>
+                )}
                 {content.inputs && (
                   <div id="calculator-inputs">
                     <ContentCard title="Inputs" items={content.inputs} />
@@ -395,6 +406,14 @@ export default function CalculatorInteractive({
                 {content.assumptions && (
                   <div id="calculator-assumptions">
                     <ContentCard title="Assumptions" items={content.assumptions} />
+                  </div>
+                )}
+                {content.commonMistakes && (
+                  <div id="calculator-common-mistakes">
+                    <ContentCard
+                      title="Common mistakes"
+                      items={content.commonMistakes}
+                    />
                   </div>
                 )}
                 {content.tips && (

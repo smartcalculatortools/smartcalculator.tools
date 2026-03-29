@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { calculators } from "./calculators";
 import { calculatorContent } from "./calculatorContent";
+import { calculatorSeoPriorities } from "../seoPriorities";
 
 const minSummaryLength = 120;
 const minItemLength = 12;
@@ -12,6 +13,7 @@ const minTableRows = 3;
 const minTableColumns = 2;
 const minTableCellLength = 1;
 const minChartPoints = 3;
+const minPrioritySectionItems = 2;
 
 const minimums = {
   inputs: 2,
@@ -21,6 +23,10 @@ const minimums = {
   formulas: 1,
   references: 1,
 } as const;
+
+const prioritySlugs = new Set(
+  calculatorSeoPriorities.slice(0, 10).map(({ slug }) => slug)
+);
 
 describe("calculator content standards", () => {
   calculators.forEach((calc) => {
@@ -77,6 +83,25 @@ describe("calculator content standards", () => {
           expect(Number.isFinite(point.value)).toBe(true);
         });
         expect(chart.note && chart.note.length).toBeGreaterThanOrEqual(minExampleNoteLength);
+      }
+
+      if (prioritySlugs.has(calc.slug)) {
+        expect(
+          content.whenToUse && content.whenToUse.length >= minPrioritySectionItems,
+          `${calc.slug} whenToUse`
+        ).toBe(true);
+        content.whenToUse?.forEach((item) => {
+          expect(item.length).toBeGreaterThanOrEqual(minItemLength);
+        });
+
+        expect(
+          content.commonMistakes &&
+            content.commonMistakes.length >= minPrioritySectionItems,
+          `${calc.slug} commonMistakes`
+        ).toBe(true);
+        content.commonMistakes?.forEach((item) => {
+          expect(item.length).toBeGreaterThanOrEqual(minItemLength);
+        });
       }
     });
   });
