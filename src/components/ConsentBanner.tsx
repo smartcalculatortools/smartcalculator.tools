@@ -88,7 +88,7 @@ export default function ConsentBanner() {
       data-consent-open={isOpen ? "true" : undefined}
       className="fixed inset-x-0 bottom-0 z-50 px-3 pb-3 sm:px-4 sm:pb-4"
     >
-      <div className="mx-auto flex w-full max-w-6xl justify-end">
+      <div className="mx-auto flex w-full max-w-6xl justify-start">
         <div
           className={`pointer-events-auto w-full rounded-[24px] border border-stroke bg-surface p-4 shadow-soft sm:p-5 ${
             showPreferences ? "max-w-3xl" : "max-w-xl"
