@@ -1,7 +1,17 @@
-﻿"use client";
+"use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { formatNumber } from "@/lib/calculators/format";
+import {
+  appendScientificHistory,
+  type ScientificHistoryEntry,
+} from "@/lib/calculators/scientificHistory";
+import {
+  clearStoredScientificHistory,
+  readStoredScientificHistorySnapshot,
+  subscribeToScientificHistory,
+  writeStoredScientificHistory,
+} from "@/lib/calculators/scientificHistoryStorage";
 import { evaluateExpression, type AngleMode } from "@/lib/calculators/scientific";
 import type { CalculatorInsights } from "@/lib/insights";
 
@@ -99,6 +109,11 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
   const [angleMode, setAngleMode] = useState<AngleMode>("rad");
   const [memory, setMemory] = useState(0);
   const [ans, setAns] = useState(0);
+  const history = useSyncExternalStore(
+    subscribeToScientificHistory,
+    readStoredScientificHistorySnapshot,
+    () => [] as ScientificHistoryEntry[]
+  );
 
   const result = useMemo(
     () => evaluateExpression(expression, { angleMode, ans }),
@@ -146,7 +161,25 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
     onInsightsChange?.(insights);
   }, [insights, onInsightsChange]);
 
-  const appendValue = (value: string) => {
+  const commitHistory = useCallback((nextEntries: ScientificHistoryEntry[]) => {
+    writeStoredScientificHistory(nextEntries);
+  }, []);
+
+  const recordSuccessfulCalculation = useCallback(
+    (nextResult: number) => {
+      const nextEntries = appendScientificHistory(history, {
+        expression,
+        result: nextResult,
+      });
+
+      if (nextEntries !== history) {
+        commitHistory(nextEntries);
+      }
+    },
+    [commitHistory, expression, history]
+  );
+
+  const appendValue = useCallback((value: string) => {
     setExpression((prev) => {
       if (prev === "0") {
         if (value === ".") return "0.";
@@ -156,9 +189,9 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
       }
       return `${prev}${value}`;
     });
-  };
+  }, []);
 
-  const applyNegate = () => {
+  const applyNegate = useCallback(() => {
     setExpression((prev) => {
       if (prev === "0") return "0";
       if (/^-?\d+(\.\d+)?$/.test(prev)) {
@@ -166,7 +199,7 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
       }
       return `-(${prev})`;
     });
-  };
+  }, []);
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
@@ -180,6 +213,7 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
       if (event.key === "Enter") {
         event.preventDefault();
         if (result === null) return;
+        recordSuccessfulCalculation(result);
         setAns(result);
         setExpression(String(result));
         return;
@@ -217,7 +251,7 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [result]);
+  }, [appendValue, recordSuccessfulCalculation, result]);
 
   const handleKey = (key: Key) => {
     switch (key.action) {
@@ -229,6 +263,7 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
         return;
       case "equals":
         if (result === null) return;
+        recordSuccessfulCalculation(result);
         setAns(result);
         setExpression(String(result));
         return;
@@ -263,18 +298,74 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
 
   return (
     <div className="grid gap-4">
-      <div className="rounded-2xl border border-stroke bg-white/70 px-4 py-3">
-        <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-muted">
-          <span>Display</span>
-          <span>{angleMode.toUpperCase()}</span>
+      <div className="grid gap-3 xl:grid-cols-[1.45fr_0.85fr]">
+        <div className="rounded-[28px] border border-stroke bg-white/80 px-5 py-4 shadow-soft">
+          <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-muted">
+            <span>Display</span>
+            <span>{angleMode.toUpperCase()}</span>
+          </div>
+          <div className="mt-4 min-h-40 rounded-[24px] border border-stroke/70 bg-surface px-4 py-4 sm:min-h-48 sm:px-5">
+            <div className="text-xs uppercase tracking-[0.3em] text-muted">Expression</div>
+            <div className="mt-2 overflow-x-auto whitespace-nowrap text-lg font-medium text-ink sm:text-xl">
+              {expression}
+            </div>
+            <div className="mt-6 text-xs uppercase tracking-[0.3em] text-muted">Result</div>
+            <div className="mt-2 overflow-x-auto whitespace-nowrap font-display text-4xl leading-none text-ink sm:text-5xl">
+              {result === null ? "--" : formatNumber(result)}
+            </div>
+            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs uppercase tracking-[0.2em] text-muted">
+              <span>Memory {formatNumber(memory)}</span>
+              <span>ANS {formatNumber(ans)}</span>
+            </div>
+          </div>
         </div>
-        <div className="mt-2 text-2xl font-semibold text-ink break-all">
-          {expression}
+
+        <div className="rounded-[28px] border border-stroke bg-white/80 px-4 py-4 shadow-soft">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <div className="text-xs uppercase tracking-[0.3em] text-muted">
+                History
+              </div>
+              <p className="mt-2 text-sm text-muted">
+                Your latest completed calculations.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={clearStoredScientificHistory}
+              className="rounded-full border border-stroke px-3 py-1 text-xs font-semibold text-ink transition hover:border-ink"
+            >
+              Clear
+            </button>
+          </div>
+
+          <div className="mt-4 max-h-48 space-y-2 overflow-y-auto pr-1">
+            {history.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-stroke bg-surface px-4 py-5 text-sm text-muted">
+                No completed operations yet.
+              </div>
+            ) : (
+              history.map((entry) => (
+                <button
+                  key={`${entry.recordedAt}-${entry.expression}`}
+                  type="button"
+                  onClick={() => {
+                    setExpression(entry.expression);
+                    setAns(entry.result);
+                  }}
+                  className="block w-full rounded-2xl border border-stroke bg-surface px-4 py-3 text-left transition hover:-translate-y-0.5 hover:border-ink/30"
+                >
+                  <div className="truncate text-sm font-semibold text-ink">
+                    {entry.expression}
+                  </div>
+                  <div className="mt-1 text-sm text-muted">
+                    = {formatNumber(entry.result)}
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
         </div>
-        <div className="mt-2 text-sm text-muted">
-          Result: {result === null ? "--" : formatNumber(result)}
-        </div>
-        <div className="mt-2 text-xs text-muted">Memory: {formatNumber(memory)}</div>
       </div>
 
       <div className="grid gap-2">
@@ -285,9 +376,9 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
                 key={`${key.label}-${index}`}
                 type="button"
                 onClick={() => handleKey(key)}
-                className={`rounded-xl border border-stroke px-3 py-2 text-sm text-ink transition hover:-translate-y-0.5 ${
+                className={`min-h-12 rounded-2xl border border-stroke px-3 py-3 text-sm text-ink transition hover:-translate-y-0.5 sm:text-base ${
                   key.variant === "accent"
-                    ? "bg-accent text-white col-span-6"
+                    ? "col-span-6 bg-accent text-white"
                     : key.variant === "ghost"
                       ? "bg-surface"
                       : key.variant === "mode"

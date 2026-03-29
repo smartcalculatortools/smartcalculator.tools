@@ -72,9 +72,9 @@ export default function Home() {
       <SiteHeader />
       <main>
         <section className="section-pad pt-6 sm:pt-10">
-          <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-[0.8fr_1.2fr]">
             <CalculatorSearch />
-            <div className="rounded-[32px] border border-stroke bg-surface p-6 shadow-soft">
+            <div className="rounded-[32px] border border-stroke bg-surface p-6 shadow-soft lg:p-8">
               <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.4em] text-muted">
@@ -85,7 +85,8 @@ export default function Home() {
                   </h2>
                 </div>
                 <p className="max-w-md text-sm text-muted">
-                  Full scientific layout with keyboard support.
+                  Full scientific layout with keyboard support, a larger display,
+                  and a running history.
                 </p>
               </div>
               <div className="mt-6">
