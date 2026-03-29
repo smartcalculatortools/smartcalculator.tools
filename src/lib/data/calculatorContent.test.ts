@@ -25,7 +25,7 @@ const minimums = {
 } as const;
 
 const prioritySlugs = new Set(
-  calculatorSeoPriorities.slice(0, 10).map(({ slug }) => slug)
+  calculatorSeoPriorities.slice(0, 15).map(({ slug }) => slug)
 );
 
 describe("calculator content standards", () => {

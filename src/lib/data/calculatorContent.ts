@@ -1901,6 +1901,66 @@ const priorityContentEnhancements: Record<
       "Expecting perfect symbolic precision even though the calculator uses floating-point arithmetic in the browser.",
     ],
   },
+  percentage: {
+    whenToUse: [
+      "Calculate discounts, markups, commissions, and tax adjustments without switching between separate percentage formulas.",
+      "Measure growth, decline, or share of total when comparing sales, traffic, pricing, or budget figures.",
+      "Back into an unknown base value when you know the percentage and the result amount already.",
+    ],
+    commonMistakes: [
+      "Confusing percent change with percent difference even though they answer different comparison questions.",
+      "Using zero as the original value in percent change and expecting a defined result.",
+      "Forgetting whether the sign matters when reading decreases versus absolute change magnitude.",
+    ],
+  },
+  fraction: {
+    whenToUse: [
+      "Add, subtract, multiply, or divide classroom, recipe, measurement, and construction fractions quickly.",
+      "Convert decimal values into reduced fractions when you need cleaner math or more readable ratios.",
+      "Check mixed-number arithmetic before writing the final answer in homework or technical notes.",
+    ],
+    commonMistakes: [
+      "Entering a zero denominator, which makes the fraction undefined before any operation starts.",
+      "Forgetting that division by a fraction means multiplying by its reciprocal.",
+      "Comparing raw numerators and denominators instead of using the reduced or decimal result for size checks.",
+    ],
+  },
+  triangle: {
+    whenToUse: [
+      "Solve side-only triangles when you need area, perimeter, and angles from three known lengths.",
+      "Validate whether three measurements can actually form a triangle before using them in design or homework.",
+      "Check geometric scaling effects by comparing similar triangles and their changing areas.",
+    ],
+    commonMistakes: [
+      "Ignoring the triangle inequality and expecting valid output from side lengths that cannot form a triangle.",
+      "Mixing units across sides, such as centimeters for one side and inches for another.",
+      "Assuming the triangle is right-angled without verifying the side relationship or returned angles.",
+    ],
+  },
+  age: {
+    whenToUse: [
+      "Calculate exact age for forms, eligibility checks, HR records, and milestone tracking.",
+      "Measure the full calendar difference between two dates in years, months, and days rather than total days only.",
+      "Check next-birthday timing or total days lived for personal records and scheduling.",
+    ],
+    commonMistakes: [
+      "Using the wrong reference date when an application or regulation expects age on a specific deadline.",
+      "Assuming total days and calendar years are interchangeable even though leap years shift the count.",
+      "Typing dates in the wrong order and then misreading the absolute difference returned by the tool.",
+    ],
+  },
+  date: {
+    whenToUse: [
+      "Find elapsed calendar days or business days between two dates for planning, billing, or compliance checks.",
+      "Add or subtract a day offset from a base date when scheduling follow-ups, deadlines, or renewals.",
+      "Compare timeline options quickly without doing manual calendar counting.",
+    ],
+    commonMistakes: [
+      "Expecting business-day counts to match calendar days even when weekends are excluded.",
+      "Forgetting whether the end date should be included before comparing the result with a contract or schedule.",
+      "Using local-time assumptions while the calculator normalizes dates to avoid timezone drift.",
+    ],
+  },
 };
 
 export const calculatorContent: Record<string, CalculatorContent> = {
