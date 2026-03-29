@@ -112,7 +112,7 @@ export default function ScientificCalculator({ onInsightsChange }: CalculatorPro
   const history = useSyncExternalStore(
     subscribeToScientificHistory,
     readStoredScientificHistorySnapshot,
-    () => [] as ScientificHistoryEntry[]
+    () => readStoredScientificHistorySnapshot()
   );
 
   const result = useMemo(

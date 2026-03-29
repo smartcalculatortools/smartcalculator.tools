@@ -8,19 +8,39 @@ import {
 
 const scientificHistoryEventName =
   "smart-calculator-tools:scientific-history-updated";
+const emptyScientificHistory: ScientificHistoryEntry[] = [];
+
+let cachedSnapshot: ScientificHistoryEntry[] = emptyScientificHistory;
+let cachedRawValue: string | null = null;
 
 function canUseBrowserStorage() {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
 }
 
+function resetScientificHistorySnapshot() {
+  cachedSnapshot = emptyScientificHistory;
+  cachedRawValue = null;
+  return cachedSnapshot;
+}
+
 export function readStoredScientificHistorySnapshot() {
   if (!canUseBrowserStorage()) {
-    return [];
+    return cachedSnapshot;
   }
 
-  return parseStoredScientificHistory(
-    window.localStorage.getItem(scientificHistoryStorageKey)
-  );
+  const rawValue = window.localStorage.getItem(scientificHistoryStorageKey);
+
+  if (!rawValue) {
+    return resetScientificHistorySnapshot();
+  }
+
+  if (rawValue === cachedRawValue) {
+    return cachedSnapshot;
+  }
+
+  cachedSnapshot = parseStoredScientificHistory(rawValue);
+  cachedRawValue = rawValue;
+  return cachedSnapshot;
 }
 
 export function writeStoredScientificHistory(entries: ScientificHistoryEntry[]) {
@@ -29,9 +49,13 @@ export function writeStoredScientificHistory(entries: ScientificHistoryEntry[]) 
   }
 
   const normalizedEntries = parseStoredScientificHistory(JSON.stringify(entries));
+  const serializedEntries = JSON.stringify(normalizedEntries);
+
+  cachedSnapshot = normalizedEntries;
+  cachedRawValue = serializedEntries;
   window.localStorage.setItem(
     scientificHistoryStorageKey,
-    JSON.stringify(normalizedEntries)
+    serializedEntries
   );
   window.dispatchEvent(
     new CustomEvent<ScientificHistoryEntry[]>(scientificHistoryEventName, {
@@ -45,10 +69,11 @@ export function clearStoredScientificHistory() {
     return;
   }
 
+  resetScientificHistorySnapshot();
   window.localStorage.removeItem(scientificHistoryStorageKey);
   window.dispatchEvent(
     new CustomEvent<ScientificHistoryEntry[]>(scientificHistoryEventName, {
-      detail: [],
+      detail: emptyScientificHistory,
     })
   );
 }
@@ -60,12 +85,8 @@ export function subscribeToScientificHistory(
     return () => {};
   }
 
-  const onHistoryUpdated = (event: Event) => {
-    const detail =
-      event instanceof CustomEvent
-        ? event.detail
-        : readStoredScientificHistorySnapshot();
-    listener(parseStoredScientificHistory(JSON.stringify(detail)));
+  const onHistoryUpdated = () => {
+    listener(readStoredScientificHistorySnapshot());
   };
 
   const onStorage = (event: StorageEvent) => {
