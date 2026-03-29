@@ -90,7 +90,7 @@ export default function ConsentBanner() {
     >
       <div className="mx-auto flex w-full max-w-6xl justify-start">
         <div
-          className={`pointer-events-auto w-full rounded-[24px] border border-stroke bg-surface p-4 shadow-soft sm:p-5 ${
+          className={`pointer-events-auto w-full rounded-[24px] border border-[#e2c49b] bg-[linear-gradient(135deg,rgba(254,243,228,0.98),rgba(255,250,242,0.98))] p-4 shadow-[0_22px_60px_rgba(23,18,12,0.16)] transition-colors duration-200 hover:border-[#d7b17a] sm:p-5 ${
             showPreferences ? "max-w-3xl" : "max-w-xl"
           }`}
         >
