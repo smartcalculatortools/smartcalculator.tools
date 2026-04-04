@@ -2,6 +2,20 @@
 
 آخر تحديث: 2026-04-04
 
+## نقطة التوقف الحالية
+
+- [x] تم تحسين أفضل 20 صفحة حاسبة ذات أولوية عبر محتوى أعلى الصفحة وإشارات تحريرية أوضح
+- [x] تم نشر دفعة إضافية من صفحات `comparison` عالية النية داخل `/learn`
+- [x] تم تجهيز دفعتين من روابط طلب الفهرسة داخل هذا الملف
+- [ ] الخطوة التالية المباشرة: `comparison pages` إضافية أو تحسين `CTR` لعناوين أفضل 20 حاسبة
+
+## القرار التالي عند استئناف العمل
+
+اختر أحد المسارين مباشرة:
+
+- [ ] المسار 1: إنشاء دفعة جديدة من صفحات `comparison` عالية النية
+- [ ] المسار 2: تحسين `CTR` لعناوين ووصف أفضل 20 حاسبة من نتائج البحث
+
 ## 1. قائمة التشغيل الأسبوعية
 
 ### كل يوم اثنين
@@ -136,6 +150,34 @@
    - `/calc/loan`
    - `/calc/ai-token-cost`
    - من 3 إلى 5 مقالات `learn` جديدة
+
+### روابط جاهزة للنسخ: الدفعة الأولى
+انسخ هذه الروابط واحدة واحدة في `Inspect any URL`:
+
+1. `https://smartcalculatortools.net/calculators`
+2. `https://smartcalculatortools.net/learn`
+3. `https://smartcalculatortools.net/category/financial`
+4. `https://smartcalculatortools.net/category/ai`
+5. `https://smartcalculatortools.net/category/fitness`
+6. `https://smartcalculatortools.net/calc/mortgage`
+7. `https://smartcalculatortools.net/calc/loan`
+8. `https://smartcalculatortools.net/calc/ai-token-cost`
+9. `https://smartcalculatortools.net/calc/calorie`
+10. `https://smartcalculatortools.net/learn/financial/15-year-vs-30-year-mortgage`
+11. `https://smartcalculatortools.net/learn/fitness/bmr-vs-tdee-for-calorie-planning`
+12. `https://smartcalculatortools.net/learn/ai/inference-vs-fine-tune-costs`
+
+### روابط جاهزة للنسخ: الدفعة الثانية
+نفّذ هذه الدفعة بعد عدة أيام من الدفعة الأولى:
+
+1. `https://smartcalculatortools.net/learn/math/mean-vs-median-when-data-is-skewed`
+2. `https://smartcalculatortools.net/learn/crypto/crypto-dca-vs-staking-for-long-term-holders`
+3. `https://smartcalculatortools.net/learn/other/age-vs-date-calculator-when-to-use-each`
+4. `https://smartcalculatortools.net/calc/crypto-profit-loss`
+5. `https://smartcalculatortools.net/calc/crypto-dca`
+6. `https://smartcalculatortools.net/calc/percentage`
+7. `https://smartcalculatortools.net/calc/bmr`
+8. `https://smartcalculatortools.net/calc/body-fat`
 
 ### مراجعة الفهرسة
 1. افتح `Indexing > Pages`
