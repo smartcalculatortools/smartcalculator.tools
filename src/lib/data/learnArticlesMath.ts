@@ -166,4 +166,59 @@ export const mathLearnArticles: LearnArticle[] = [
       },
     ],
   },
+  {
+    categoryId: "math",
+    slug: "mean-vs-median-when-data-is-skewed",
+    targetQuery: "mean vs median calculator",
+    title: "Mean vs Median: Which Average Should You Trust When Data Is Skewed?",
+    summary:
+      "Use average, mean median mode, standard deviation, probability, and proportion calculators to compare center measures when the data set is not evenly shaped.",
+    intro:
+      "The mean and the median can tell very different stories when a data set contains outliers or is heavily skewed. People often say they want the average when they actually need the center that best represents a messy real-world pattern. This guide shows how to decide which measure belongs in the final explanation and how to use the related statistics tools on the site to support that choice.",
+    calculatorSlugs: ["average", "mean-median-mode", "standard-deviation", "probability", "proportion"],
+    sections: [
+      {
+        title: "Use mean when the data is balanced enough to share the load",
+        body:
+          "The mean is strong when values are reasonably balanced and you want every observation to influence the result. It becomes less representative when one or two extreme values pull the center away from what feels typical.",
+        bullets: [
+          "Use Average or Mean when the data has no major outliers.",
+          "Expect the mean to move more than the median when one extreme point enters the set.",
+          "Check whether the result still feels representative before you report it as the main center.",
+        ],
+      },
+      {
+        title: "Use median when you need the middle to resist outliers",
+        body:
+          "Median is often the safer summary when the data is skewed or when a few unusually high or low values distort the mean. It gives you the middle position rather than a fully shared average.",
+        bullets: [
+          "Use Mean Median Mode to compare both values side by side before choosing one.",
+          "Treat a wide mean-versus-median gap as a signal that the data may be skewed.",
+          "Use median more often for income, prices, or other data sets with long tails.",
+        ],
+      },
+      {
+        title: "Use variation and context so the center is not oversold",
+        body:
+          "A center measure becomes more honest when it is paired with spread and context. Standard deviation, probability, and proportion do not replace mean or median, but they can stop you from oversimplifying a noisy set.",
+        bullets: [
+          "Use Standard Deviation when consistency around the center matters too.",
+          "Use Probability and Proportion when the decision depends on outcome shares rather than one summary value.",
+          "Report both mean and median if the audience could misread one alone.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "When should I use median instead of mean?",
+        answer:
+          "Use median when outliers or skewed values make the mean feel less representative of what is typical in the middle of the data set.",
+      },
+      {
+        question: "Is mean ever still useful in skewed data?",
+        answer:
+          "Yes, but it should often be shown with median or variation measures so the reader can see how much extreme values are influencing the result.",
+      },
+    ],
+  },
 ];

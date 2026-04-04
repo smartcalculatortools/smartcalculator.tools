@@ -166,4 +166,59 @@ export const fitnessLearnArticles: LearnArticle[] = [
       },
     ],
   },
+  {
+    categoryId: "fitness",
+    slug: "bmr-vs-tdee-for-calorie-planning",
+    targetQuery: "bmr vs tdee calculator",
+    title: "BMR vs TDEE: Which Number Should You Use for Calorie Planning?",
+    summary:
+      "Use BMR, TDEE, calorie, macro split, and protein intake calculators to understand the difference between resting needs and full daily energy planning.",
+    intro:
+      "Many people find two calorie-related numbers and then use the wrong one for the wrong job. BMR and TDEE are related, but they answer different planning questions. BMR estimates resting energy needs, while TDEE tries to capture the full daily burn once activity is included. This guide shows how to use both numbers correctly when setting calorie and macro targets.",
+    calculatorSlugs: ["bmr", "tdee", "calorie", "macro-split", "protein-intake"],
+    sections: [
+      {
+        title: "Use BMR as a baseline, not as the final intake target",
+        body:
+          "BMR is useful because it estimates the energy your body would need at rest. That makes it a planning anchor, but it usually understates what you need to maintain body weight in daily life.",
+        bullets: [
+          "Use BMR when you want a resting baseline from common formulas.",
+          "Do not use BMR alone as your normal maintenance intake unless a clinician has told you otherwise.",
+          "Treat BMR as the starting layer underneath calorie planning, not the whole answer.",
+        ],
+      },
+      {
+        title: "Use TDEE when the real question is maintenance calories",
+        body:
+          "TDEE is usually the more useful number for day-to-day planning because it tries to include movement, exercise, and normal activity. That makes it the better anchor for maintenance, weight loss, or lean-gain adjustments.",
+        bullets: [
+          "Use TDEE or the Calorie Calculator when you need a practical daily target.",
+          "Choose the activity level carefully because it can move the result more than expected.",
+          "Run a slightly lower activity case if you are unsure whether your training volume is stable.",
+        ],
+      },
+      {
+        title: "Use calories and macros after the right anchor is chosen",
+        body:
+          "Macro planning works better once you know which calorie anchor you are actually using. BMR helps explain the floor, while TDEE supports the real daily target that protein and macros will sit inside.",
+        bullets: [
+          "Use Protein Intake once the calorie target direction is clear.",
+          "Use Macro Split after maintenance or deficit calories have been set realistically.",
+          "Adjust from your weekly trend, not one day of hunger or one weigh-in.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Should I eat at my BMR number to lose fat faster?",
+        answer:
+          "Usually no. BMR estimates resting needs and often sits too low for a practical daily target. Most people should build from maintenance calories instead of treating BMR as the diet target.",
+      },
+      {
+        question: "Which number matters more for normal calorie planning: BMR or TDEE?",
+        answer:
+          "TDEE is usually more useful for normal planning because it includes daily activity. BMR is the baseline underneath it, not the full daily picture.",
+      },
+    ],
+  },
 ];

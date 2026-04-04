@@ -166,4 +166,59 @@ export const otherLearnArticles: LearnArticle[] = [
       },
     ],
   },
+  {
+    categoryId: "other",
+    slug: "age-vs-date-calculator-when-to-use-each",
+    targetQuery: "age calculator vs date calculator",
+    title: "Age Calculator vs Date Calculator: When Should You Use Each One?",
+    summary:
+      "Use age, date, time duration, and time calculators to choose the right tool for birthdays, deadlines, offsets, and exact elapsed time.",
+    intro:
+      "Age and date calculators look similar on the surface because both work with calendar information, but they answer different questions. An age calculator expresses time in years, months, and days from a birth or reference date, while a date calculator focuses more directly on offsets and day counts. This guide helps you pick the right one before you enter the dates.",
+    calculatorSlugs: ["age", "date", "time-duration", "time"],
+    sections: [
+      {
+        title: "Use age when the answer must be expressed as age",
+        body:
+          "Age questions usually need a human-friendly output such as years, months, and days. That makes the age calculator more useful when the wording is about age thresholds, birthdays, or exact age at a reference point.",
+        bullets: [
+          "Use Age Calculator when the form or rule asks for age directly.",
+          "Keep the date of birth and reference date exact to avoid avoidable drift.",
+          "Use the age-style output when months and days matter, not only the total day count.",
+        ],
+      },
+      {
+        title: "Use date when the question is a gap or offset",
+        body:
+          "Date calculators are stronger when the real task is days between dates or when you need to add or subtract a fixed number of days from a base date. That is a different task from age formatting.",
+        bullets: [
+          "Use Date Calculator for day-count and date-offset questions.",
+          "Check whether the start or end date should be included in the rule you are following.",
+          "Use date offsets for scheduling and deadline planning rather than age breakdowns.",
+        ],
+      },
+      {
+        title: "Use time tools when the problem is not really about calendar age",
+        body:
+          "Some people reach for age or date tools when the task is actually about hours, durations, or clock time. That is where time-based calculators become the better fit.",
+        bullets: [
+          "Use Time Duration when the question is about hours and minutes rather than dates.",
+          "Use Time tools when you need departure, arrival, or clock-based offsets.",
+          "Choose the calculator by the output format the task actually needs.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the main difference between an age calculator and a date calculator?",
+        answer:
+          "An age calculator gives age-style output in years, months, and days, while a date calculator is usually better for day counts and adding or subtracting dates.",
+      },
+      {
+        question: "Why do people use the wrong date tool so often?",
+        answer:
+          "Because both tools involve calendar inputs, but they solve different tasks. The right choice depends on whether you need age formatting, day counts, or a new target date.",
+      },
+    ],
+  },
 ];

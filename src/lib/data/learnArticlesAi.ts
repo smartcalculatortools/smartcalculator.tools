@@ -166,4 +166,59 @@ export const aiLearnArticles: LearnArticle[] = [
       },
     ],
   },
+  {
+    categoryId: "ai",
+    slug: "inference-vs-fine-tune-costs",
+    targetQuery: "ai inference vs fine tune cost calculator",
+    title: "AI Inference vs Fine-Tune Costs: Which Budget Driver Matters More?",
+    summary:
+      "Use AI inference budget, fine-tune budget, token cost, model comparator, and chatbot cost calculators to compare recurring usage cost against project-style training spend.",
+    intro:
+      "Teams often compare inference costs and fine-tune costs as if they belong in the same budget bucket, but they usually behave very differently. Inference is often a recurring operating expense, while fine-tuning behaves more like a project cost with follow-up iteration. This guide shows how to compare them using the AI calculators on the site without losing the distinction between one-time spend and ongoing usage.",
+    calculatorSlugs: ["ai-inference-budget", "ai-fine-tune-budget", "ai-token-cost", "ai-model-comparator", "ai-chatbot-cost"],
+    sections: [
+      {
+        title: "Use inference tools when the question is monthly run-rate",
+        body:
+          "Inference becomes the main budget driver when the system is already serving requests and the cost moves with prompt size, output size, and request volume. That is usually the central question for production planning.",
+        bullets: [
+          "Use AI Inference Budget when the workflow is live or close to launch.",
+          "Use AI Token Cost when prompt and completion size are the variables driving spend.",
+          "Use AI Chatbot Cost when the product is conversation-heavy and request counts can climb quickly.",
+        ],
+      },
+      {
+        title: "Use fine-tune budgeting when the question is project cost",
+        body:
+          "Fine-tuning belongs to a different decision layer because it often happens in bursts and includes experimentation, retries, and evaluation. It should not be folded into the same line item as recurring inference without explanation.",
+        bullets: [
+          "Use AI Fine-Tune Budget when you are estimating training, adaptation, and iteration cost.",
+          "Treat fine-tune work as project spend first, then decide how it changes later inference value.",
+          "Add an iteration buffer because the first training pass is rarely the last one.",
+        ],
+      },
+      {
+        title: "Use model comparison only after workload type is clear",
+        body:
+          "A model comparison becomes more useful once you know whether you are comparing recurring inference efficiency or whether the real question is whether training work should happen at all. That context decides what the numbers mean.",
+        bullets: [
+          "Use AI Model Comparator after the workload shape is already defined.",
+          "Compare monthly inference totals separately from one-time tuning spend.",
+          "Choose the budget structure that matches whether you are optimizing operations or experimentation.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Should AI fine-tune cost be treated the same way as inference cost?",
+        answer:
+          "Usually no. Fine-tune cost is often project-style spend, while inference cost is a recurring operating expense that grows with usage.",
+      },
+      {
+        question: "Which AI budget usually grows faster after launch?",
+        answer:
+          "Inference often becomes the larger long-term driver because recurring request volume and token usage can expand quietly after the product goes live.",
+      },
+    ],
+  },
 ];

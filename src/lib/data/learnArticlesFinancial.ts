@@ -166,4 +166,59 @@ export const financialLearnArticles: LearnArticle[] = [
       },
     ],
   },
+  {
+    categoryId: "financial",
+    slug: "15-year-vs-30-year-mortgage",
+    targetQuery: "15 year vs 30 year mortgage calculator",
+    title: "15-Year vs 30-Year Mortgage: Which Payment Structure Fits Better?",
+    summary:
+      "Use mortgage, amortization, house affordability, refinance, and mortgage points calculators to compare 15-year and 30-year loan structures with real monthly tradeoffs.",
+    intro:
+      "The 15-year versus 30-year mortgage decision is not only about interest savings. It is a cash-flow decision, a risk decision, and sometimes a flexibility decision. A shorter term can save large amounts of interest, but it can also create a tighter monthly budget. This guide shows how to compare the two structures using the housing calculators on the site without reducing the decision to one number.",
+    calculatorSlugs: ["mortgage", "amortization", "house-affordability", "refinance", "mortgage-points"],
+    sections: [
+      {
+        title: "Compare payment strain before comparing lifetime savings",
+        body:
+          "A 15-year term usually wins on total interest, but the monthly payment can rise enough to change your margin of safety. That matters if you are also managing taxes, insurance, repairs, and other fixed obligations.",
+        bullets: [
+          "Use Mortgage Calculator first to compare the real monthly difference between 15-year and 30-year terms.",
+          "Use House Affordability to see whether the shorter term still leaves room for the rest of your budget.",
+          "Reject a lower-interest structure if it only works in a perfect month.",
+        ],
+      },
+      {
+        title: "Use amortization to see what the shorter term is buying you",
+        body:
+          "The strongest argument for the shorter term is not only lower interest. It is that principal usually falls much faster, which changes equity growth and future flexibility.",
+        bullets: [
+          "Use Amortization views to compare how quickly balance drops under each term.",
+          "Look at principal paid in the first five years, not just the final interest total.",
+          "Keep the same loan amount when you compare terms so the difference stays clean.",
+        ],
+      },
+      {
+        title: "Compare the term to realistic alternatives",
+        body:
+          "Sometimes the better question is not 15-year or 30-year in isolation. It is whether a 30-year loan with optional extra payments gives you a more resilient version of the same goal.",
+        bullets: [
+          "Run a 30-year scenario with extra monthly payments before assuming the 15-year is the only disciplined option.",
+          "Use Refinance and Mortgage Points tools when rate structure may change later.",
+          "Choose the structure that protects both long-term cost and short-term resilience.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Is a 15-year mortgage always better because it saves interest?",
+        answer:
+          "No. It usually saves interest, but the higher payment can reduce flexibility and increase budget stress if your housing margin is already tight.",
+      },
+      {
+        question: "What is the best fair comparison between 15-year and 30-year mortgages?",
+        answer:
+          "Compare monthly payment, total interest, early principal reduction, and whether the payment still fits comfortably after taxes, insurance, and other ownership costs.",
+      },
+    ],
+  },
 ];

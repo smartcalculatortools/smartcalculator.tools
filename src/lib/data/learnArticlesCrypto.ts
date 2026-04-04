@@ -166,4 +166,59 @@ export const cryptoLearnArticles: LearnArticle[] = [
       },
     ],
   },
+  {
+    categoryId: "crypto",
+    slug: "crypto-dca-vs-staking-for-long-term-holders",
+    targetQuery: "crypto dca vs staking calculator",
+    title: "Crypto DCA vs Staking: Which Strategy Fits a Long-Term Holder Better?",
+    summary:
+      "Use crypto DCA, staking yield, fee impact, and profit/loss calculators to compare gradual accumulation against passive yield on held capital.",
+    intro:
+      "Long-term crypto holders often compare DCA and staking as if they solve the same problem, but they do not. DCA changes how capital enters the market, while staking changes how already-held assets may earn yield over time. This guide shows how to compare them without mixing entry timing, fee drag, and passive return assumptions into one vague strategy.",
+    calculatorSlugs: ["crypto-dca", "crypto-staking-yield", "crypto-fee-impact", "crypto-profit-loss"],
+    sections: [
+      {
+        title: "Use DCA when the main problem is entry timing",
+        body:
+          "DCA is strongest when the capital is not yet fully deployed and the main concern is reducing the pressure of choosing one perfect entry point. It smooths the path into the position, but it does not create yield by itself.",
+        bullets: [
+          "Use Crypto DCA when buys are spread across several entries over time.",
+          "Compare average cost basis rather than judging the strategy from one lucky or unlucky purchase.",
+          "Keep the funding schedule consistent when you compare DCA to other options.",
+        ],
+      },
+      {
+        title: "Use staking when the capital is already held",
+        body:
+          "Staking is more relevant once the asset is already owned and the question becomes how that capital might earn a passive return. It answers a different stage of the decision than DCA.",
+        bullets: [
+          "Use Crypto Staking Yield to estimate passive return on assets that are already in the position.",
+          "Check lockup terms and yield assumptions before treating staking as stable income.",
+          "Do not compare staking to DCA unless the timing of capital deployment is made explicit.",
+        ],
+      },
+      {
+        title: "Compare net effect after fees and opportunity cost",
+        body:
+          "A fair comparison should include fees, deployment timing, and what each strategy is giving up. DCA may reduce timing stress while staking may produce yield, but both have tradeoffs that can be measured.",
+        bullets: [
+          "Use Crypto Fee Impact when repeated purchases or transfers create friction.",
+          "Use Profit and Loss if you want to compare what later price scenarios do to each path.",
+          "Choose the approach that matches whether your problem is entry pacing or capital utilization.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "Is DCA better than staking for long-term holders?",
+        answer:
+          "Not automatically. DCA is about how capital enters the market, while staking is about what held capital may earn after entry. The better choice depends on which stage you are actually in.",
+      },
+      {
+        question: "Why is DCA not a true replacement for staking yield?",
+        answer:
+          "Because DCA manages entry timing, not passive return. Staking and DCA answer different questions and should only be compared once timeline and capital status are clear.",
+      },
+    ],
+  },
 ];
