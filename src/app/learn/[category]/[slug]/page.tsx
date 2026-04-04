@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import CalculatorCard from "@/components/CalculatorCard";
+import EditorialMeta from "@/components/EditorialMeta";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import {
@@ -14,6 +16,7 @@ import {
   getLearnArticlesByCategory,
   getLearnArticleStaticParams,
 } from "@/lib/data/learnArticles";
+import { learnContentReviewedAt } from "@/lib/editorial";
 import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
@@ -85,8 +88,10 @@ export default async function LearnArticlePage({
     headline: article.title,
     description: article.summary,
     url: `${siteUrl}/learn/${category.id}/${article.slug}`,
+    mainEntityOfPage: `${siteUrl}/learn/${category.id}/${article.slug}`,
     about: category.name,
     keywords: article.targetQuery,
+    dateModified: learnContentReviewedAt,
     author: {
       "@type": "Organization",
       name: siteName,
@@ -96,6 +101,36 @@ export default async function LearnArticlePage({
       name: siteName,
       url: siteUrl,
     },
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Learn",
+        item: `${siteUrl}/learn`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `${category.name} Guide`,
+        item: `${siteUrl}/learn/${category.id}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: article.title,
+        item: `${siteUrl}/learn/${category.id}/${article.slug}`,
+      },
+    ],
   };
 
   const faqJsonLd = {
@@ -120,11 +155,23 @@ export default async function LearnArticlePage({
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <main>
         <section className="section-pad">
           <div className="mx-auto w-full max-w-6xl">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Learn", href: "/learn" },
+                { label: `${category.name} Guide`, href: `/learn/${category.id}` },
+                { label: article.title },
+              ]}
+            />
             <p className="text-xs uppercase tracking-[0.4em] text-muted">
               {category.name} learn article
             </p>
@@ -147,6 +194,7 @@ export default async function LearnArticlePage({
                 Open {category.name.toLowerCase()} calculators
               </Link>
             </div>
+            <EditorialMeta reviewedAt={learnContentReviewedAt} className="mt-6" />
           </div>
         </section>
 

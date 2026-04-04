@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import LearnArticleCard from "@/components/LearnArticleCard";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -35,12 +36,41 @@ export const metadata: Metadata = {
 };
 
 export default function LearnIndexPage() {
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Learn",
+        item: `${siteUrl}/learn`,
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <main>
         <section className="section-pad">
           <div className="mx-auto w-full max-w-6xl">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Learn" },
+              ]}
+            />
             <p className="text-xs uppercase tracking-[0.4em] text-muted">Learn</p>
             <h1 className="mt-2 font-display text-4xl text-ink">Short guides for each calculator domain</h1>
             <p className="mt-4 max-w-3xl text-sm text-muted">

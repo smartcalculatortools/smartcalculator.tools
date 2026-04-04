@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState, type ComponentType } from "react";
 import Link from "next/link";
 import { formatCurrency, formatNumber } from "@/lib/calculators/format";
 import { AdSlot } from "@/components/Ads";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import CalculatorCard from "@/components/CalculatorCard";
 import CalculatorUsageTracker from "@/components/CalculatorUsageTracker";
 import { adSlots } from "@/lib/ads";
@@ -290,6 +291,19 @@ export default function CalculatorInteractive({
       {!isEmbed && <CalculatorUsageTracker calculator={calculator} />}
       <section className="pt-4 pb-3 sm:pt-8 sm:pb-5">
         <div className="mx-auto w-full max-w-5xl">
+          {!isEmbed && (
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Calculators", href: "/calculators" },
+                {
+                  label: `${category?.name ?? "Calculators"} Calculators`,
+                  href: `/category/${calculator.category}`,
+                },
+                { label: calculator.name },
+              ]}
+            />
+          )}
           <p className="text-xs uppercase tracking-[0.4em] text-muted">
             {category?.name}
           </p>

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import CalculatorCard from "@/components/CalculatorCard";
+import EditorialMeta from "@/components/EditorialMeta";
 import LearnArticleCard from "@/components/LearnArticleCard";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -12,6 +14,7 @@ import {
 } from "@/lib/data/calculators";
 import { getLearnArticlesByCategory } from "@/lib/data/learnArticles";
 import { getLearningGuide } from "@/lib/data/learningGuides";
+import { learnContentReviewedAt } from "@/lib/editorial";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
 type GuidePageProps = {
@@ -80,7 +83,9 @@ export default async function GuidePage({ params }: GuidePageProps) {
     headline: guide.title,
     description: guide.summary,
     url: `${siteUrl}/learn/${category.id}`,
+    mainEntityOfPage: `${siteUrl}/learn/${category.id}`,
     about: category.name,
+    dateModified: learnContentReviewedAt,
     author: {
       "@type": "Organization",
       name: siteName,
@@ -90,6 +95,30 @@ export default async function GuidePage({ params }: GuidePageProps) {
       name: siteName,
       url: siteUrl,
     },
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Learn",
+        item: `${siteUrl}/learn`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `${category.name} Guide`,
+        item: `${siteUrl}/learn/${category.id}`,
+      },
+    ],
   };
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -124,6 +153,10 @@ export default async function GuidePage({ params }: GuidePageProps) {
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
       <script
@@ -133,6 +166,13 @@ export default async function GuidePage({ params }: GuidePageProps) {
       <main>
         <section className="section-pad">
           <div className="mx-auto w-full max-w-6xl">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Learn", href: "/learn" },
+                { label: `${category.name} Guide` },
+              ]}
+            />
             <p className="text-xs uppercase tracking-[0.4em] text-muted">
               {category.name} guide
             </p>
@@ -153,6 +193,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
                 All guides
               </Link>
             </div>
+            <EditorialMeta reviewedAt={learnContentReviewedAt} className="mt-6" />
           </div>
         </section>
 

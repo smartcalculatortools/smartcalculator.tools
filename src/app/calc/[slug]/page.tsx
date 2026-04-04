@@ -123,12 +123,18 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
       {
         "@type": "ListItem",
         position: 2,
+        name: "Calculators",
+        item: `${siteUrl}/calculators`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
         name: `${category?.name ?? "Calculators"} Calculators`,
         item: `${siteUrl}/category/${calculator.category}`,
       },
       {
         "@type": "ListItem",
-        position: 3,
+        position: 4,
         name: seoPriority?.title ?? calculator.name,
         item: `${siteUrl}/calc/${calculator.slug}`,
       },

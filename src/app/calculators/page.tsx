@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import {
@@ -55,10 +56,32 @@ export default function CalculatorsIndexPage() {
       url: siteUrl,
     },
   };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Calculators",
+        item: `${siteUrl}/calculators`,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen">
       <SiteHeader />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
@@ -70,6 +93,12 @@ export default function CalculatorsIndexPage() {
       <main>
         <section className="section-pad">
           <div className="mx-auto w-full max-w-6xl">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Calculators" },
+              ]}
+            />
             <p className="text-xs uppercase tracking-[0.4em] text-muted">
               All calculators
             </p>

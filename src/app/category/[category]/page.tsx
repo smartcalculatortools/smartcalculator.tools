@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import CalculatorCard from "@/components/CalculatorCard";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -14,7 +16,6 @@ import {
 import { getLearnArticlesByCategory } from "@/lib/data/learnArticles";
 import { getLearningGuide } from "@/lib/data/learningGuides";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
-import Link from "next/link";
 
 type CategoryPageProps = {
   params: Promise<{ category: string }>;
@@ -95,6 +96,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       {
         "@type": "ListItem",
         position: 2,
+        name: "Calculators",
+        item: `${siteUrl}/calculators`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
         name: `${category.name} Calculators`,
         item: `${siteUrl}/category/${category.id}`,
       },
@@ -141,6 +148,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <main>
         <section className="section-pad">
           <div className="mx-auto w-full max-w-6xl">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Calculators", href: "/calculators" },
+                { label: `${category.name} Calculators` },
+              ]}
+            />
             <p className="text-xs uppercase tracking-[0.4em] text-muted">
               {category.name}
             </p>
