@@ -1,29 +1,19 @@
 import type { CategoryId } from "@/lib/data/calculators";
+import { aiLearnArticles } from "./learnArticlesAi";
+import { cryptoLearnArticles } from "./learnArticlesCrypto";
+import { financialLearnArticles } from "./learnArticlesFinancial";
+import { fitnessLearnArticles } from "./learnArticlesFitness";
+import { mathLearnArticles } from "./learnArticlesMath";
+import { otherLearnArticles } from "./learnArticlesOther";
+import type { LearnArticle } from "./learnArticlesShared";
 
-export type LearnArticleSection = {
-  title: string;
-  body: string;
-  bullets: string[];
-};
+export type {
+  LearnArticle,
+  LearnArticleFaq,
+  LearnArticleSection,
+} from "./learnArticlesShared";
 
-export type LearnArticleFaq = {
-  question: string;
-  answer: string;
-};
-
-export type LearnArticle = {
-  categoryId: CategoryId;
-  slug: string;
-  targetQuery: string;
-  title: string;
-  summary: string;
-  intro: string;
-  calculatorSlugs: string[];
-  sections: LearnArticleSection[];
-  faqs: LearnArticleFaq[];
-};
-
-export const learnArticles: LearnArticle[] = [
+const coreLearnArticles: LearnArticle[] = [
   {
     categoryId: "financial",
     slug: "compare-loan-offers",
@@ -366,6 +356,16 @@ export const learnArticles: LearnArticle[] = [
       },
     ],
   },
+];
+
+export const learnArticles: LearnArticle[] = [
+  ...coreLearnArticles,
+  ...financialLearnArticles,
+  ...fitnessLearnArticles,
+  ...mathLearnArticles,
+  ...otherLearnArticles,
+  ...cryptoLearnArticles,
+  ...aiLearnArticles,
 ];
 
 export function getLearnArticle(categoryId: CategoryId, slug: string) {
