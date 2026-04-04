@@ -11,6 +11,7 @@ import {
 } from "@/lib/data/calculators";
 import {
   getLearnArticle,
+  getLearnArticlesByCategory,
   getLearnArticleStaticParams,
 } from "@/lib/data/learnArticles";
 import { getLearningGuide } from "@/lib/data/learningGuides";
@@ -71,6 +72,9 @@ export default async function LearnArticlePage({
   }
 
   const categoryGuide = getLearningGuide(category.id);
+  const siblingArticles = getLearnArticlesByCategory(category.id)
+    .filter((item) => item.slug !== article.slug)
+    .slice(0, 3);
   const relatedCalculators = article.calculatorSlugs
     .map((calculatorSlug) => getCalculator(calculatorSlug))
     .filter((calculator): calculator is Calculator => calculator !== null);
@@ -195,6 +199,80 @@ export default async function LearnArticlePage({
             </div>
           </div>
         </section>
+
+        {(categoryGuide || siblingArticles.length > 0) && (
+          <section className="section-pad pt-0">
+            <div className="mx-auto w-full max-w-6xl rounded-[32px] border border-stroke bg-surface p-8 shadow-soft">
+              <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.4em] text-muted">
+                    Explore more
+                  </p>
+                  <h2 className="font-display text-3xl text-ink">
+                    Keep moving through {category.name.toLowerCase()} learning pages
+                  </h2>
+                  <p className="mt-2 max-w-3xl text-sm text-muted">
+                    Use the category guide for the wider framework, then open related
+                    questions when you want a narrower decision path.
+                  </p>
+                </div>
+                <Link
+                  href={`/category/${category.id}`}
+                  className="text-sm text-ink underline"
+                >
+                  Browse {category.name.toLowerCase()} calculators
+                </Link>
+              </div>
+              {categoryGuide ? (
+                <div className="mt-6 rounded-3xl border border-stroke/80 bg-white/70 p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                    Category guide
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl text-ink">
+                    {categoryGuide.title}
+                  </h3>
+                  <p className="mt-3 text-sm text-muted">{categoryGuide.summary}</p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <Link
+                      href={`/learn/${category.id}`}
+                      className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white"
+                    >
+                      Read the guide
+                    </Link>
+                    <Link
+                      href={`/category/${category.id}`}
+                      className="rounded-full border border-stroke px-4 py-2 text-sm text-ink"
+                    >
+                      Open calculators
+                    </Link>
+                  </div>
+                </div>
+              ) : null}
+              {siblingArticles.length > 0 && (
+                <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {siblingArticles.map((item) => (
+                    <Link
+                      key={`${item.categoryId}-${item.slug}`}
+                      href={`/learn/${item.categoryId}/${item.slug}`}
+                      className="rounded-2xl border border-stroke/80 bg-white/70 px-4 py-4 transition hover:-translate-y-0.5"
+                    >
+                      <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                        {item.targetQuery}
+                      </p>
+                      <h3 className="mt-2 text-lg font-semibold text-ink">
+                        {item.title}
+                      </h3>
+                      <p className="mt-3 text-sm text-muted">{item.summary}</p>
+                      <p className="mt-4 text-sm font-semibold text-ink underline">
+                        Read article
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         <section className="section-pad pt-0">
           <div className="mx-auto w-full max-w-6xl rounded-[32px] border border-stroke bg-surface p-8 shadow-soft">

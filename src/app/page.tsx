@@ -111,7 +111,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="/category/financial"
+                  href="/calculators"
                   className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5"
                 >
                   Explore the calculators
@@ -205,7 +205,7 @@ export default function Home() {
                 <p className="text-xs uppercase tracking-[0.4em] text-muted">Featured</p>
                 <h2 className="font-display text-3xl text-ink">Popular calculators</h2>
               </div>
-              <Link href="/category/financial" className="text-sm text-ink underline">
+              <Link href="/calculators" className="text-sm text-ink underline">
                 View all calculators
               </Link>
             </div>

@@ -12,6 +12,9 @@ export default function SiteFooter() {
           </p>
         </div>
         <div className="flex flex-wrap gap-4 text-sm text-muted">
+          <Link href="/calculators" className="hover:text-ink">
+            Calculators
+          </Link>
           <Link href="/category/financial" className="hover:text-ink">
             Financial
           </Link>

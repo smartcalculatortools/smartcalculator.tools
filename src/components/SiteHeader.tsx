@@ -15,6 +15,9 @@ export default function SiteHeader() {
           </div>
         </Link>
         <nav className="hidden items-center gap-4 text-sm text-muted lg:flex">
+          <Link href="/calculators" className="transition-colors hover:text-ink">
+            Calculators
+          </Link>
           {categories.map((category) => (
             <Link
               key={category.id}
@@ -24,9 +27,6 @@ export default function SiteHeader() {
               {category.name}
             </Link>
           ))}
-          <Link href="/widgets" className="transition-colors hover:text-ink">
-            Widgets
-          </Link>
           <Link href="/learn" className="transition-colors hover:text-ink">
             Learn
           </Link>
@@ -39,7 +39,7 @@ export default function SiteHeader() {
         </nav>
         <div className="hidden items-center gap-3 md:flex">
           <Link
-            href="/category/financial"
+            href="/calculators"
             className="rounded-full border border-stroke px-4 py-2 text-sm text-ink transition hover:border-ink"
           >
             Explore

@@ -91,6 +91,16 @@ export default async function GuidePage({ params }: GuidePageProps) {
       url: siteUrl,
     },
   };
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: calculators.map((calculator, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: calculator.name,
+      url: `${siteUrl}/calc/${calculator.slug}`,
+    })),
+  };
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -111,6 +121,10 @@ export default async function GuidePage({ params }: GuidePageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
       <script
         type="application/ld+json"
@@ -208,6 +222,42 @@ export default async function GuidePage({ params }: GuidePageProps) {
             <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {starters.map((calculator) => (
                 <CalculatorCard key={calculator.slug} calculator={calculator} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section-pad pt-0">
+          <div className="mx-auto w-full max-w-6xl rounded-[32px] border border-stroke bg-surface p-6 shadow-soft">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.4em] text-muted">
+                  Full directory
+                </p>
+                <h2 className="font-display text-3xl text-ink">
+                  Every {category.name.toLowerCase()} calculator linked from this guide
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm text-muted">
+                  Use this directory if you want to move from the high-level guide into
+                  the exact calculator page without going back through the category index.
+                </p>
+              </div>
+              <Link
+                href={`/category/${category.id}`}
+                className="text-sm text-ink underline"
+              >
+                Open the category hub
+              </Link>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {calculators.map((calculator) => (
+                <Link
+                  key={calculator.slug}
+                  href={`/calc/${calculator.slug}`}
+                  className="rounded-full border border-stroke bg-white/70 px-4 py-2 text-sm text-ink transition hover:border-ink"
+                >
+                  {calculator.name}
+                </Link>
               ))}
             </div>
           </div>

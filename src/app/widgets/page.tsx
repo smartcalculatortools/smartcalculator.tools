@@ -10,6 +10,14 @@ export const metadata = buildMetadata({
   description:
     "Embed Smart Calculator Tools on your site with ready-to-use iframe snippets.",
   path: "/widgets",
+  robots: {
+    index: false,
+    follow: true,
+    googleBot: {
+      index: false,
+      follow: true,
+    },
+  },
 });
 
 const embedList = [

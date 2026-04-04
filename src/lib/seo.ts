@@ -5,12 +5,14 @@ type BuildMetadataOptions = {
   title: string;
   description: string;
   path: string;
+  robots?: Metadata["robots"];
 };
 
 export function buildMetadata({
   title,
   description,
   path,
+  robots,
 }: BuildMetadataOptions): Metadata {
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}${path}`;
@@ -19,6 +21,7 @@ export function buildMetadata({
   return {
     title,
     description,
+    robots,
     alternates: {
       canonical: url,
     },

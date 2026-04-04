@@ -38,7 +38,11 @@ import type {
 import { getConfigurableCalculatorDefinition } from "@/lib/data/configurableCalculators/index";
 import { buildFaqItems } from "@/lib/faq";
 import type { CalculatorInsights } from "@/lib/insights";
-import { getLearnArticlesByCalculator } from "@/lib/data/learnArticles";
+import {
+  getLearnArticlesByCalculator,
+  getLearnArticlesByCategory,
+} from "@/lib/data/learnArticles";
+import { getLearningGuide } from "@/lib/data/learningGuides";
 import {
   getRelatedCalculators,
   getRelatedContextLabel,
@@ -261,10 +265,25 @@ export default function CalculatorInteractive({
     () => buildFaqItems({ calculator, category, content }),
     [calculator, category, content]
   );
+  const categoryGuide = useMemo(
+    () => (category ? getLearningGuide(category.id) : null),
+    [category]
+  );
   const relatedLearnArticles = useMemo(
-    () => getLearnArticlesByCalculator(calculator.slug).slice(0, 2),
+    () => getLearnArticlesByCalculator(calculator.slug).slice(0, 3),
     [calculator.slug]
   );
+  const categoryLearnArticles = useMemo(() => {
+    if (!category) return [];
+
+    const directArticleKeys = new Set(
+      relatedLearnArticles.map((article) => `${article.categoryId}:${article.slug}`)
+    );
+
+    return getLearnArticlesByCategory(category.id)
+      .filter((article) => !directArticleKeys.has(`${article.categoryId}:${article.slug}`))
+      .slice(0, 2);
+  }, [category, relatedLearnArticles]);
 
   return (
     <main className={isEmbed ? "p-4 sm:p-6" : ""}>
@@ -287,6 +306,14 @@ export default function CalculatorInteractive({
                 className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
               >
                 Back to {category?.name}
+              </Link>
+            )}
+            {!isEmbed && categoryGuide && (
+              <Link
+                href={`/learn/${calculator.category}`}
+                className="rounded-full border border-stroke px-4 py-2 text-xs text-ink"
+              >
+                Category guide
               </Link>
             )}
             <button
@@ -506,7 +533,8 @@ export default function CalculatorInteractive({
         </section>
       )}
 
-      {!isEmbed && relatedLearnArticles.length > 0 && (
+      {!isEmbed &&
+        (categoryGuide || relatedLearnArticles.length > 0 || categoryLearnArticles.length > 0) && (
         <section className="section-pad-compact pt-0 cv-auto">
           <div className="mx-auto w-full max-w-5xl">
             <div className="rounded-[28px] border border-stroke bg-surface p-6 shadow-soft">
@@ -517,26 +545,93 @@ export default function CalculatorInteractive({
               <p className="mt-3 max-w-2xl text-sm text-muted">
                 Use these short guides when you want the decision framework behind the numbers, not just the raw output.
               </p>
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
-                {relatedLearnArticles.map((article) => (
-                  <Link
-                    key={`${article.categoryId}-${article.slug}`}
-                    href={`/learn/${article.categoryId}/${article.slug}`}
-                    className="rounded-2xl border border-stroke/80 bg-white/70 px-4 py-4 transition hover:-translate-y-0.5"
-                  >
-                    <p className="text-xs uppercase tracking-[0.3em] text-muted">
-                      {article.targetQuery}
-                    </p>
-                    <h3 className="mt-2 text-lg font-semibold text-ink">
-                      {article.title}
-                    </h3>
-                    <p className="mt-3 text-sm text-muted">{article.summary}</p>
-                    <p className="mt-4 text-sm font-semibold text-ink underline">
-                      Read the guide
-                    </p>
-                  </Link>
-                ))}
-              </div>
+              {categoryGuide ? (
+                <div className="mt-5 rounded-3xl border border-stroke/80 bg-white/70 p-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                    Category guide
+                  </p>
+                  <h3 className="mt-2 font-display text-2xl text-ink">
+                    {categoryGuide.title}
+                  </h3>
+                  <p className="mt-3 max-w-3xl text-sm text-muted">
+                    {categoryGuide.summary}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <Link
+                      href={`/learn/${calculator.category}`}
+                      className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white"
+                    >
+                      Read category guide
+                    </Link>
+                    <Link
+                      href={`/category/${calculator.category}`}
+                      className="rounded-full border border-stroke px-4 py-2 text-sm text-ink"
+                    >
+                      Browse {category?.name ?? "category"} calculators
+                    </Link>
+                  </div>
+                </div>
+              ) : null}
+              {relatedLearnArticles.length > 0 && (
+                <div className="mt-5">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                        Directly related
+                      </p>
+                      <h3 className="mt-2 text-lg font-semibold text-ink">
+                        Articles that mention this calculator
+                      </h3>
+                    </div>
+                    {categoryGuide ? (
+                      <Link
+                        href={`/learn/${calculator.category}`}
+                        className="text-sm text-ink underline"
+                      >
+                        View all {category?.name?.toLowerCase() ?? "category"} guides
+                      </Link>
+                    ) : null}
+                  </div>
+                  <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {relatedLearnArticles.map((article) => (
+                      <Link
+                        key={`${article.categoryId}-${article.slug}`}
+                        href={`/learn/${article.categoryId}/${article.slug}`}
+                        className="rounded-2xl border border-stroke/80 bg-white/70 px-4 py-4 transition hover:-translate-y-0.5"
+                      >
+                        <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                          {article.targetQuery}
+                        </p>
+                        <h3 className="mt-2 text-lg font-semibold text-ink">
+                          {article.title}
+                        </h3>
+                        <p className="mt-3 text-sm text-muted">{article.summary}</p>
+                        <p className="mt-4 text-sm font-semibold text-ink underline">
+                          Read the guide
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {categoryLearnArticles.length > 0 && (
+                <div className="mt-5">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                    More in {category?.name ?? "this category"}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    {categoryLearnArticles.map((article) => (
+                      <Link
+                        key={`${article.categoryId}-${article.slug}`}
+                        href={`/learn/${article.categoryId}/${article.slug}`}
+                        className="rounded-full border border-stroke bg-white/70 px-4 py-2 text-sm text-ink transition hover:border-ink"
+                      >
+                        {article.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
