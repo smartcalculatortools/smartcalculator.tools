@@ -6,6 +6,7 @@ import { formatCurrency, formatNumber } from "@/lib/calculators/format";
 import { AdSlot } from "@/components/Ads";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import CalculatorCard from "@/components/CalculatorCard";
+import EditorialMeta from "@/components/EditorialMeta";
 import CalculatorUsageTracker from "@/components/CalculatorUsageTracker";
 import { adSlots } from "@/lib/ads";
 import type { Calculator, Category } from "@/lib/data/calculators";
@@ -43,11 +44,14 @@ import {
   getLearnArticlesByCalculator,
   getLearnArticlesByCategory,
 } from "@/lib/data/learnArticles";
+import { getCalculatorPriorityGuide } from "@/lib/data/calculatorPriorityGuides";
 import { getLearningGuide } from "@/lib/data/learningGuides";
+import { calculatorContentReviewedAt } from "@/lib/editorial";
 import {
   getRelatedCalculators,
   getRelatedContextLabel,
 } from "@/lib/relatedCalculators";
+import { getCalculatorSeoPriority } from "@/lib/seoPriorities";
 
 type CalculatorInteractiveProps = {
   calculator: Calculator;
@@ -266,6 +270,14 @@ export default function CalculatorInteractive({
     () => buildFaqItems({ calculator, category, content }),
     [calculator, category, content]
   );
+  const seoPriority = useMemo(
+    () => getCalculatorSeoPriority(calculator.slug),
+    [calculator.slug]
+  );
+  const priorityGuide = useMemo(
+    () => getCalculatorPriorityGuide(calculator.slug),
+    [calculator.slug]
+  );
   const categoryGuide = useMemo(
     () => (category ? getLearningGuide(category.id) : null),
     [category]
@@ -285,6 +297,8 @@ export default function CalculatorInteractive({
       .filter((article) => !directArticleKeys.has(`${article.categoryId}:${article.slug}`))
       .slice(0, 2);
   }, [category, relatedLearnArticles]);
+  const heroTitle = seoPriority?.title ?? calculator.name;
+  const heroSummary = seoPriority?.description ?? calculator.blurb;
 
   return (
     <main className={isEmbed ? "p-4 sm:p-6" : ""}>
@@ -300,7 +314,7 @@ export default function CalculatorInteractive({
                   label: `${category?.name ?? "Calculators"} Calculators`,
                   href: `/category/${calculator.category}`,
                 },
-                { label: calculator.name },
+                { label: heroTitle },
               ]}
             />
           )}
@@ -308,10 +322,10 @@ export default function CalculatorInteractive({
             {category?.name}
           </p>
           <h1 className="mt-1 font-display text-4xl text-ink">
-            {calculator.name}
+            {heroTitle}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted">
-            {calculator.blurb}
+            {heroSummary}
           </p>
           <div className="mt-3 flex flex-wrap gap-3">
             {!isEmbed && (
@@ -380,6 +394,78 @@ export default function CalculatorInteractive({
               </span>
             )}
           </div>
+          {!isEmbed && priorityGuide && (
+            <div className="mt-6 rounded-[28px] border border-stroke bg-surface p-5 shadow-soft">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div className="max-w-3xl">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                    Search intent guide
+                  </p>
+                  <h2 className="mt-2 font-display text-2xl text-ink">
+                    Use this page when you need a fast answer to {seoPriority?.targetQuery ?? calculator.name.toLowerCase()}
+                  </h2>
+                  <p className="mt-3 text-sm text-muted">{priorityGuide.intro}</p>
+                </div>
+                <div className="flex flex-wrap gap-2 text-xs text-muted">
+                  {seoPriority ? (
+                    <span className="rounded-full border border-stroke bg-white/70 px-3 py-1.5">
+                      {seoPriority.targetQuery}
+                    </span>
+                  ) : null}
+                  <span className="rounded-full border border-stroke bg-white/70 px-3 py-1.5">
+                    {calculator.name}
+                  </span>
+                  {content?.examples?.length ? (
+                    <span className="rounded-full border border-stroke bg-white/70 px-3 py-1.5">
+                      {content.examples.length} examples
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+              <EditorialMeta reviewedAt={calculatorContentReviewedAt} className="mt-5" />
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                <div className="rounded-2xl border border-stroke/80 bg-white/70 px-4 py-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                    Best for
+                  </p>
+                  <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-ink">
+                    {priorityGuide.bestFor.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="rounded-2xl border border-stroke/80 bg-white/70 px-4 py-4">
+                  <p className="text-xs uppercase tracking-[0.3em] text-muted">
+                    Before you start
+                  </p>
+                  <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-ink">
+                    {priorityGuide.beforeYouStart.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-5 flex flex-wrap gap-3">
+                {categoryGuide ? (
+                  <Link
+                    href={`/learn/${calculator.category}`}
+                    className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white"
+                  >
+                    Read the {category?.name?.toLowerCase() ?? "category"} guide
+                  </Link>
+                ) : null}
+                {relatedLearnArticles.slice(0, 2).map((article) => (
+                  <Link
+                    key={`${article.categoryId}-${article.slug}`}
+                    href={`/learn/${article.categoryId}/${article.slug}`}
+                    className="rounded-full border border-stroke bg-white/70 px-4 py-2 text-sm text-ink transition hover:border-ink"
+                  >
+                    {article.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
       <section className="pt-1 pb-4 sm:pt-3 sm:pb-8">

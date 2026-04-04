@@ -10,6 +10,7 @@ import {
 } from "@/lib/data/calculators";
 import { calculatorContent } from "@/lib/data/calculatorContent";
 import { buildFaqItems } from "@/lib/faq";
+import { calculatorContentReviewedAt } from "@/lib/editorial";
 import { getCalculatorSeoPriority } from "@/lib/seoPriorities";
 import { getSiteUrl, siteLocale, siteName } from "@/lib/site";
 
@@ -79,10 +80,13 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    name: calculator.name,
+    name: seoPriority?.title ?? calculator.name,
     description:
       seoPriority?.description ?? content?.summary ?? calculator.blurb,
     url: `${siteUrl}/calc/${calculator.slug}`,
+    mainEntityOfPage: `${siteUrl}/calc/${calculator.slug}`,
+    dateModified: calculatorContentReviewedAt,
+    keywords: seoPriority?.targetQuery,
     isPartOf: {
       "@type": "WebSite",
       name: siteName,
@@ -90,7 +94,11 @@ export default async function CalculatorPage({ params }: CalculatorPageProps) {
     },
     about: {
       "@type": "Thing",
-      name: calculator.name,
+      name: seoPriority?.title ?? calculator.name,
+    },
+    author: {
+      "@type": "Organization",
+      name: siteName,
     },
     publisher: {
       "@type": "Organization",
